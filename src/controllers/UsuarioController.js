@@ -32,22 +32,40 @@ const buscarUsuarioPorId = async (req, res) => {
 };
 
 const criarNovoUsuario = async (req, res) => {
-    try {
-      const { data, error } = await UsuarioService.criarNovoUsuario(req.body);
-  
-      if (error) {
-        throw new Error(`Erro ao criar novo usuário: ${error.message}`);
-      }
-  
-      res.json({ mensagem: 'Novo usuário criado com sucesso!', usuario: data });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+  try {
+    const { data, error } = await UsuarioService.criarNovoUsuario(req.body);
+
+    if (error) {
+      throw new Error(`Erro ao criar novo usuário: ${error.message}`);
     }
-  };
-  
-  
+
+    res.json({ mensagem: 'Novo usuário criado com sucesso!', usuario: data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const atualizarSenha = async (req, res) => {
+  try {
+    const { id, senhaAntiga, novaSenha } = req.body;
+
+    // Chama o serviço para atualizar a senha
+    const result = await UsuarioService.atualizarSenha(id, senhaAntiga, novaSenha);
+
+    if (result.error) {
+      throw new Error(`Erro ao atualizar a senha: ${result.error.message}`);
+    }
+
+    res.json({ mensagem: 'Senha atualizada com sucesso!', usuario: result.data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 module.exports = {
   listarUsuarios,
   buscarUsuarioPorId,
-  criarNovoUsuario
+  criarNovoUsuario,
+  atualizarSenha,
 };

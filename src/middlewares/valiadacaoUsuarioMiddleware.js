@@ -14,4 +14,19 @@ const validarNovoUsuario = [
   },
 ];
 
-module.exports = { validarNovoUsuario };
+const validarAtualizacaoSenha = [
+    body('id').notEmpty().withMessage('ID do usuário é obrigatório'),
+    body('senhaAntiga').notEmpty().withMessage('Senha antiga é obrigatória'),
+    body('novaSenha').isLength({ min: 6 }).withMessage('A nova senha deve ter pelo menos 6 caracteres'),
+  
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      next();
+    },
+  ];
+
+
+module.exports = { validarNovoUsuario, validarAtualizacaoSenha  };
