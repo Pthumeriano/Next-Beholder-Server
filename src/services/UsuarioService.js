@@ -50,6 +50,22 @@ class UsuarioService {
     }
   }
 
+  static async login(email, senha) {
+    try {
+      // Chama o método do modelo para buscar o usuário por email e senha
+      const usuario = await UsuarioModel.buscarUsuarioPorEmailSenha(email, senha);
+  
+      // Verifica se o usuário foi encontrado
+      if (!usuario.data || usuario.data.length === 0) {
+        return { error: 'Credenciais inválidas' };
+      }
+  
+      return { data: usuario.data[0] };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
 }
 
 module.exports = UsuarioService;

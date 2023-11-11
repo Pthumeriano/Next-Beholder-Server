@@ -1,4 +1,6 @@
 const UsuarioService = require('../services/UsuarioService');
+const { validarLogin } = require('../middlewares/valiadacaoUsuarioMiddleware');
+
 
 const listarUsuarios = async (req, res) => {
   try {
@@ -79,11 +81,30 @@ const excluirUsuarioPorId = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  try {
+    const { email, senha } = req.body;
+
+    // Chama o serviço para realizar o login
+    const result = await UsuarioService.login(email, senha);
+
+    if (result.error) {
+      throw new Error(`Erro ao fazer login: ${result.error}`);
+    }
+
+    res.json({ mensagem: 'Login bem-sucedido', usuario: result.data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 
 module.exports = {
   listarUsuarios,
   buscarUsuarioPorId,
   criarNovoUsuario,
   atualizarSenha,
-  excluirUsuarioPorId
+  excluirUsuarioPorId,
+  login
 };
