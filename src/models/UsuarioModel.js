@@ -69,13 +69,12 @@ class UsuarioModel {
     }
   }
   
-  static async excluirUsuarioPorIdSenha(id, senha) {
+  static async excluirUsuarioPorId(id) {
     try {
       const { data, error } = await supabase
         .from('usuario')
         .delete()
-        .eq('id', id)
-        .eq('senha', senha);
+        .eq('id', id);
 
       return { data, error };
     } catch (error) {

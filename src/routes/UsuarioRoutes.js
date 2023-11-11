@@ -9,6 +9,7 @@ router.get('/usuarios', UsuarioController.listarUsuarios);
 router.get('/usuarios/:id', UsuarioController.buscarUsuarioPorId);
 router.post('/usuarios', validarNovoUsuario, UsuarioController.criarNovoUsuario);
 router.post('/usuarios/atualizar-senha', validarAtualizacaoSenha, UsuarioController.atualizarSenha);
+router.delete('/usuarios/deletar/:id', UsuarioController.excluirUsuarioPorId);
 
 
 module.exports = router;

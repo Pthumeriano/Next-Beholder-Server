@@ -33,6 +33,23 @@ class UsuarioService {
     }
   } 
 
+  static async excluirUsuarioPorId(id) {
+    try {
+      // Verifica se o usuário com o ID fornecido existe
+      const usuarioExistente = await UsuarioModel.buscarUsuarioPorId(id);
+      if (!usuarioExistente.data) {
+        return { error: 'Usuário não encontrado' };
+      }
+
+      // Chama o método do modelo para excluir o usuário por ID
+      const result = await UsuarioModel.excluirUsuarioPorId(id);
+
+      return result;
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
 }
 
 module.exports = UsuarioService;

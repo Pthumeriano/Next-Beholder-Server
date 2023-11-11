@@ -62,10 +62,28 @@ const atualizarSenha = async (req, res) => {
   }
 };
 
+const excluirUsuarioPorId = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Chama o serviço para excluir o usuário por ID
+    const result = await UsuarioService.excluirUsuarioPorId(id);
+
+    if (result.error) {
+      throw new Error(`Erro ao excluir usuário: ${result.error.message}`);
+    }
+
+    res.json({ mensagem: 'Usuário excluído com sucesso!' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 module.exports = {
   listarUsuarios,
   buscarUsuarioPorId,
   criarNovoUsuario,
   atualizarSenha,
+  excluirUsuarioPorId
 };
