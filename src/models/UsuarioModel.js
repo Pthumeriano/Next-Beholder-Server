@@ -18,6 +18,15 @@ class UsuarioModel {
       return { error };
     }
   }
+
+  static async criarNovoUsuario(usuario) {
+    try {
+      const { data, error } = await supabase.from('usuario').upsert([usuario]);
+      return { data, error };
+    } catch (error) {
+      return { error };
+    }
+  }
 }
 
 module.exports = UsuarioModel;

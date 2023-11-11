@@ -31,7 +31,23 @@ const buscarUsuarioPorId = async (req, res) => {
   }
 };
 
+const criarNovoUsuario = async (req, res) => {
+    try {
+      const { data, error } = await UsuarioService.criarNovoUsuario(req.body);
+  
+      if (error) {
+        throw new Error(`Erro ao criar novo usuário: ${error.message}`);
+      }
+  
+      res.json({ mensagem: 'Novo usuário criado com sucesso!', usuario: data });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+  
+  
 module.exports = {
   listarUsuarios,
   buscarUsuarioPorId,
+  criarNovoUsuario
 };
