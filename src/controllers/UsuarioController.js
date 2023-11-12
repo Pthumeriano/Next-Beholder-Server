@@ -82,19 +82,14 @@ const excluirUsuarioPorId = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  try {
-    const { email, senha } = req.body;
+  const { email, senha } = req.body;
 
-    // Chama o serviço para realizar o login
-    const result = await UsuarioService.login(email, senha);
+  const result = await UsuarioService.login(email, senha, res);
 
-    if (result.error) {
-      throw new Error(`Erro ao fazer login: ${result.error}`);
-    }
-
-    res.json({ mensagem: 'Login bem-sucedido', usuario: result.data });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  if (result.error) {
+    res.status(401).json({ error: result.error });
+  } else {
+    res.json(result);
   }
 };
 
