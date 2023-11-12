@@ -9,13 +9,26 @@ class UsuarioModel {
       return { error };
     }
   }
-
-  static async buscarUsuarioPorId(id) {
+  static async excluirUsuario(token, senha) {
     try {
-      const { data, error } = await supabase.from('usuario').select('*').eq('id', id).single();
-      return { data, error };
+      // Verifica se o usuário está autenticado
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      const userId = decoded.userId;
+
+      // Chama o método do modelo para buscar o usuário por ID e senha
+      const usuario = await UsuarioModel.buscarUsuarioPoridSenha(userId, senha);
+
+      // Verifica se o usuário com o ID e senha fornecidos existe
+      if (!usuario.data || usuario.data.length === 0) {
+        return { error: 'Usuário não encontrado ou senha incorreta' };
+      }
+
+      // Agora que sabemos que o usuário é válido, chama o método do modelo para excluir o usuário por ID
+      const result = await UsuarioModel.excluirUsuarioPorId(userId);
+
+      return result;
     } catch (error) {
-      return { error };
+      return { error: error.message };
     }
   }
 

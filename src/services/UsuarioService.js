@@ -16,36 +16,46 @@ class UsuarioService {
     return await UsuarioModel.criarNovoUsuario(usuario);
   }
 
-  static async atualizarSenha(id, senhaAntiga, novaSenha) {
+  static async atualizarSenha(senhaAntiga, novaSenha, token) {
     try {
-      // Chama o método do modelo para verificar o usuário e a senha antiga
-      
-      const usuarioValido = await UsuarioModel.buscarUsuarioPoridSenha(id, senhaAntiga);
+      // Verifica se o usuário está autenticado
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      const userId = decoded.userId;
 
-      // Verifica se o usuário é válido
-      if (!usuarioValido.data || usuarioValido.data.length === 0) {
-        return { error: 'Usuário ou senha antiga inválidos' };
+      // Chama o método do modelo para buscar o usuário por ID e senha
+      console.log(decoded)
+      const usuario = await UsuarioModel.buscarUsuarioPoridSenha(userId, senhaAntiga);
+
+      // Verifica se o usuário com o ID e senha fornecidos existe
+      if (!usuario.data || usuario.data.length === 0) {
+        return { error: 'Usuário não encontrado ou senha incorreta' };
       }
-  
+
       // Agora que sabemos que o usuário é válido, chama o método do modelo para atualizar a senha
-      const result = await UsuarioModel.atualizarSenha(id, novaSenha);
-  
+      const result = await UsuarioModel.atualizarSenha(userId, novaSenha);
+
       return result;
     } catch (error) {
       return { error: error.message };
     }
-  } 
+  }
 
-  static async excluirUsuarioPorId(id) {
+  static async excluirUsuario(token, senha) {
     try {
-      // Verifica se o usuário com o ID fornecido existe
-      const usuarioExistente = await UsuarioModel.buscarUsuarioPorId(id);
-      if (!usuarioExistente.data) {
-        return { error: 'Usuário não encontrado' };
+      // Verifica se o usuário está autenticado
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      const userId = decoded.userId;
+
+      // Chama o método do modelo para buscar o usuário por ID e senha
+      const usuario = await UsuarioModel.buscarUsuarioPoridSenha(userId, senha);
+
+      // Verifica se o usuário com o ID e senha fornecidos existe
+      if (!usuario.data || usuario.data.length === 0) {
+        return { error: 'Usuário não encontrado ou senha incorreta' };
       }
 
-      // Chama o método do modelo para excluir o usuário por ID
-      const result = await UsuarioModel.excluirUsuarioPorId(id);
+      // Agora que sabemos que o usuário é válido, chama o método do modelo para excluir o usuário por ID
+      const result = await UsuarioModel.excluirUsuarioPorId(userId);
 
       return result;
     } catch (error) {

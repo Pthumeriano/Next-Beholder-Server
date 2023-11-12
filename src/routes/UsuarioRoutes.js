@@ -1,18 +1,15 @@
 const express = require('express');
 const UsuarioController = require('../controllers/UsuarioController');
-const { validarNovoUsuario } = require('../middlewares/valiadacaoUsuarioMiddleware');
-const { validarAtualizacaoSenha } = require('../middlewares/valiadacaoUsuarioMiddleware')
-const { validarLogin } = require('../middlewares/valiadacaoUsuarioMiddleware');
-
+const { validarNovoUsuario, validarAtualizacaoSenha, validarLogin } = require('../middlewares/valiadacaoUsuarioMiddleware');
+const autenticarMiddleware = require('../middlewares/autenticacaoMiddleware');
 
 const router = express.Router();
 
-router.get('/usuarios', UsuarioController.listarUsuarios);
-router.get('/usuarios/:id', UsuarioController.buscarUsuarioPorId);
+router.get('/usuarios', autenticarMiddleware, UsuarioController.listarUsuarios);
+router.get('/usuarios/:id', autenticarMiddleware, UsuarioController.buscarUsuarioPorId);
 router.post('/usuarios', validarNovoUsuario, UsuarioController.criarNovoUsuario);
-router.post('/usuarios/atualizar-senha', validarAtualizacaoSenha, UsuarioController.atualizarSenha);
-router.delete('/usuarios/deletar/:id', UsuarioController.excluirUsuarioPorId);
-router.post('/usuarios/login', validarLogin, UsuarioController.login); 
-
+router.post('/usuarios/atualizar-senha', autenticarMiddleware, validarAtualizacaoSenha, UsuarioController.atualizarSenha);
+router.delete('/usuarios/excluir', autenticarMiddleware, UsuarioController.excluirUsuario);
+router.post('/usuarios/login', validarLogin, UsuarioController.login);
 
 module.exports = router;

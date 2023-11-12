@@ -49,13 +49,13 @@ const criarNovoUsuario = async (req, res) => {
 
 const atualizarSenha = async (req, res) => {
   try {
-    const { id, senhaAntiga, novaSenha } = req.body;
+    const { senhaAntiga, novaSenha } = req.body;
 
     // Chama o serviço para atualizar a senha
-    const result = await UsuarioService.atualizarSenha(id, senhaAntiga, novaSenha);
+    const result = await UsuarioService.atualizarSenha(senhaAntiga, novaSenha, req.cookies.BeholderToken);
 
     if (result.error) {
-      throw new Error(`Erro ao atualizar a senha: ${result.error.message}`);
+      throw new Error(`Erro ao atualizar a senha: ${result.error}`);
     }
 
     res.json({ mensagem: 'Senha atualizada com sucesso!', usuario: result.data });
@@ -64,15 +64,13 @@ const atualizarSenha = async (req, res) => {
   }
 };
 
-const excluirUsuarioPorId = async (req, res) => {
+const excluirUsuario = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    // Chama o serviço para excluir o usuário por ID
-    const result = await UsuarioService.excluirUsuarioPorId(id);
+    // Chama o serviço para verificar o usuário e excluir por ID
+    const result = await UsuarioService.excluirUsuario(req.cookies.BeholderToken, req.body.senha);
 
     if (result.error) {
-      throw new Error(`Erro ao excluir usuário: ${result.error.message}`);
+      throw new Error(`Erro ao excluir usuário: ${result.error}`);
     }
 
     res.json({ mensagem: 'Usuário excluído com sucesso!' });
@@ -100,6 +98,6 @@ module.exports = {
   buscarUsuarioPorId,
   criarNovoUsuario,
   atualizarSenha,
-  excluirUsuarioPorId,
+  excluirUsuario,
   login
 };
