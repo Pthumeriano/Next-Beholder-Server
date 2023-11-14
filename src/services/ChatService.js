@@ -4,6 +4,7 @@
 
 
 const supabase = require('../config/supabase');
+const jwt = require('jsonwebtoken');
 const ChatModel = require('../models/ChatModel')
 const UsuarioService = require('../services/UsuarioService');
 
@@ -28,16 +29,18 @@ class ChatService {
         return await ChatModel.excluirChat(id);
     }
 
-    static async criarChat(id){
-        //pegar id do cookie depois 
+    static async criarChat(token){
 
-        const usuario = await UsuarioService.buscarUsuario(id)
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        const userId = decoded.userId;
+
+        const usuario = await UsuarioService.buscarUsuario(userId)
         
         if (!usuario.data || usuario.data.length === 0) {
             return { error: 'Mestre da mesa inválido' };
-          }
+        }
 
-        return await ChatModel.criarChat(id);
+        return await ChatModel.criarChat(userId);
     }
 
 }
