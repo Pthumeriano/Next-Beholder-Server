@@ -9,14 +9,10 @@ class UsuarioModel {
       return { error };
     }
   }
-  static async excluirUsuario(token, senha) {
+  static async excluirUsuario(id, senha) {
     try {
-      // Verifica se o usuário está autenticado
-      const decoded = jwt.verify(token, process.env.SECRET_KEY);
-      const userId = decoded.userId;
 
-      // Chama o método do modelo para buscar o usuário por ID e senha
-      const usuario = await UsuarioModel.buscarUsuarioPoridSenha(userId, senha);
+      const usuario = await UsuarioModel.buscarUsuarioPoridSenha(id, senha);
 
       // Verifica se o usuário com o ID e senha fornecidos existe
       if (!usuario.data || usuario.data.length === 0) {
@@ -24,7 +20,7 @@ class UsuarioModel {
       }
 
       // Agora que sabemos que o usuário é válido, chama o método do modelo para excluir o usuário por ID
-      const result = await UsuarioModel.excluirUsuarioPorId(userId);
+      const result = await UsuarioModel.excluirUsuarioPorId(id);
 
       return result;
     } catch (error) {
