@@ -11,7 +11,7 @@ class ChatModel {
           const { data, error } = await supabase.from('chat').select('*');
           return { data, error };
         } catch (error) {
-          return { error };
+          return { error: error.message };
         }
       }
 
@@ -20,7 +20,16 @@ class ChatModel {
           const { data, error } = await supabase.from('chat').select('*').eq('id', id);
           return { data, error };
         } catch (error) {
-          return { error };
+          return { error: error.message };
+        }
+      }
+
+      static async buscarChatMestre(id, mestre){
+        try {
+          const { data, error } = await supabase.from('chat').select('*').eq('id', id).eq('mestre', mestre);
+          return { data, error };
+         }catch (error) {
+            return { error: error.message };
         }
       }
 
@@ -45,7 +54,7 @@ class ChatModel {
         
           return { data, error };
         } catch (error) {
-          return { error };
+          return { error: error.message };
         }
       }
 

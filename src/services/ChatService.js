@@ -18,15 +18,22 @@ class ChatService {
         return await ChatModel.buscarChat(id);
     }
 
-    static async excluirChat(id){
+    static async excluirChat(id, token){
 
-        const chat = await ChatModel.buscarChat(id);
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        const userId = decoded.userId;
+
+        const chat = await ChatModel.buscarChatMestre(id, userId)
+
+        console.log('Token: ' + token)
+        console.log('ID: ' + userId)
+        console.log('ID chat: ' + id)
 
         if (!chat.data || chat.data.length === 0) {
             return { error: 'Chat não encontrado' };
         }
 
-        return await ChatModel.excluirChat(id);
+        return await ChatModel.excluirChat(id, userId);
     }
 
     static async criarChat(token){
