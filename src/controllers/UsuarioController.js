@@ -12,11 +12,10 @@ const listarUsuarios = async (req, res) => {
   }
 };
 
-const buscarUsuarioPorId = async (req, res) => {
-  const { id } = req.params;
+const buscarUsuario = async (req, res) => {
 
   try {
-    const { data, error } = await UsuarioService.buscarUsuarioPorId(id);
+    const { data, error } = await UsuarioService.buscarUsuario(req.body.id);
     if (error) {
       throw new Error(`Erro ao buscar usuário por ID: ${error.message}`);
     }
@@ -93,7 +92,7 @@ const login = async (req, res) => {
 
 module.exports = {
   listarUsuarios,
-  buscarUsuarioPorId,
+  buscarUsuario,
   criarNovoUsuario,
   atualizarSenha,
   excluirUsuario,

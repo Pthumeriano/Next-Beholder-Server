@@ -7,8 +7,8 @@ class UsuarioService {
     return await UsuarioModel.listarUsuarios();
   }
 
-  static async buscarUsuarioPorId(id) {
-    return await UsuarioModel.buscarUsuarioPorId(id);
+  static async buscarUsuario(id) {
+    return await UsuarioModel.buscarUsuario(id);
   }
 
   static async criarNovoUsuario(usuario) {

@@ -1,4 +1,11 @@
+/*
+  todo chat tem um mestre associado, se o usuario apagar a conta, o banco apaga todos os chats associados
+*/
+
+
+const supabase = require('../config/supabase');
 const ChatModel = require('../models/ChatModel')
+const UsuarioService = require('../services/UsuarioService');
 
 class ChatService {
 
@@ -19,6 +26,18 @@ class ChatService {
         }
 
         return await ChatModel.excluirChat(id);
+    }
+
+    static async criarChat(id){
+        //pegar id do cookie depois 
+
+        const usuario = await UsuarioService.buscarUsuario(id)
+        
+        if (!usuario.data || usuario.data.length === 0) {
+            return { error: 'Mestre da mesa inválido' };
+          }
+
+        return await ChatModel.criarChat(id);
     }
 
 }

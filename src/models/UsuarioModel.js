@@ -9,6 +9,16 @@ class UsuarioModel {
       return { error };
     }
   }
+
+  static async buscarUsuario(id) {
+    try {
+      const {data, error} = await supabase.from('usuario').select('*').eq('id', id);
+      return {data, error}
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
   static async excluirUsuario(id, senha) {
     try {
 

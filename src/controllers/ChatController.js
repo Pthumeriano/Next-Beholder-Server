@@ -1,3 +1,8 @@
+/*
+  todo chat tem um mestre associado, se o usuario apagar a conta, o banco apaga todos os chats associados
+*/
+
+
 const ChatService = require('../services/ChatService');
 
 const listarChats = async (req, res) => {
@@ -46,8 +51,25 @@ const excluirChat = async (req, res) => {
       }
 }
 
+const criarChat = async (req, res) => {
+    try {
+
+        const result = await ChatService.criarChat(req.body.id);
+    
+        if (result.error) {
+          throw new Error(`Erro ao criar chat: ${result.error}`);
+        }
+    
+        res.json({ mensagem: 'Chat criado com sucesso!' });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+
+}
+
 module.exports = {
     listarChats,
     buscarChat,
-    excluirChat
+    excluirChat,
+    criarChat
 }

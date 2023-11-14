@@ -4,6 +4,7 @@
 
 const jwt = require('jsonwebtoken');
 const MesaModel = require('../models/MesaModel');
+const ChatService = require('../services/ChatService')
 
 class MesaService {
 

@@ -1,3 +1,7 @@
+/*
+  todo chat tem um mestre associado, se o usuario apagar a conta, o banco apaga todos os chats associados
+*/
+
 const supabase = require('../config/supabase');
 
 class ChatModel {
@@ -29,6 +33,22 @@ class ChatModel {
         }
       }
       
+      static async criarChat(mestre) {
+        try {
+          
+          const { data, error } = await supabase
+          .from('chat')
+          .insert([
+            {'mestre':mestre},
+            ])
+          .select()
+        
+          return { data, error };
+        } catch (error) {
+          return { error };
+        }
+      }
+
 }
 
 module.exports = ChatModel;

@@ -5,8 +5,8 @@ const autenticarMiddleware = require('../middlewares/autenticacaoMiddleware');
 
 const router = express.Router();
 
-router.get('/usuarios', autenticarMiddleware, UsuarioController.listarUsuarios);
-router.get('/usuarios/:id', autenticarMiddleware, UsuarioController.buscarUsuarioPorId);
+router.get('/usuarios', UsuarioController.listarUsuarios);
+router.get('/usuario', UsuarioController.buscarUsuario);
 router.post('/usuarios', validarNovoUsuario, UsuarioController.criarNovoUsuario);
 router.post('/usuarios/atualizar-senha', autenticarMiddleware, validarAtualizacaoSenha, UsuarioController.atualizarSenha);
 router.delete('/usuarios/excluir', autenticarMiddleware, UsuarioController.excluirUsuario);
