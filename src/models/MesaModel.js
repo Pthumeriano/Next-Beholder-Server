@@ -1,6 +1,12 @@
+/*
+  A mesa tem um chat, precisa chamar a criação do chat na hora de criar a mesa e passar o id pro serviço da Mesa
+*/
+
 const supabase = require('../config/supabase');
 
 class MesaModel {
+
+
     static async listarMesas() {
         try {
           const { data, error } = await supabase.from('mesa').select('*');

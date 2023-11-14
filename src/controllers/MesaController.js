@@ -1,3 +1,6 @@
+/*
+  A mesa tem um chat, precisa chamar a criação do chat na hora de criar a mesa e passar o id pro serviço da Mesa
+*/
 const MesaService = require('../services/MesaService');
 
 const listarMesas = async (req, res) => {
