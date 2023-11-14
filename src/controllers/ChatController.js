@@ -31,8 +31,23 @@ const buscarChat = async (req, res) => {
 
 }
 
+const excluirChat = async (req, res) => {
+    try {
+
+        const result = await ChatService.excluirChat(req.body.id);
+    
+        if (result.error) {
+          throw new Error(`Erro ao excluir chat: ${result.error}`);
+        }
+    
+        res.json({ mensagem: 'Chat excluído com sucesso!' });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+}
 
 module.exports = {
     listarChats,
-    buscarChat
+    buscarChat,
+    excluirChat
 }

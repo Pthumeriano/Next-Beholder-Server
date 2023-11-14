@@ -20,6 +20,15 @@ class ChatModel {
         }
       }
 
+      static async excluirChat(id){
+        try {
+            const { data } = await supabase.from('chat').delete().eq('id',id);
+            return {data}
+        } catch (error) {
+            return { error: error.message };
+        }
+      }
+      
 }
 
 module.exports = ChatModel;
