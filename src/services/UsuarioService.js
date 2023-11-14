@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const cookie = require('cookie');
 
 const UsuarioModel = require('../models/UsuarioModel');
 

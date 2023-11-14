@@ -1,6 +1,4 @@
 const UsuarioService = require('../services/UsuarioService');
-const { validarLogin } = require('../middlewares/valiadacaoUsuarioMiddleware');
-
 
 const listarUsuarios = async (req, res) => {
   try {
