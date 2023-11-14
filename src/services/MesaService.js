@@ -1,20 +1,35 @@
-/*
-  A mesa tem um chat, precisa chamar a criação do chat na hora de criar a mesa e passar o id pro serviço da Mesa
-*/
-
 const jwt = require('jsonwebtoken');
 const MesaModel = require('../models/MesaModel');
+const ChatModel = require('../models/ChatModel');
 
 class MesaService {
 
-    static async listarMesas() {
-        return await MesaModel.listarMesas();
+  static async listarMesas() {
+    return await MesaModel.listarMesas();
+  }
+
+  static async criarMesa(token, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas) {
+    try {
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      const mestre = decoded.userId;
+
+      // Chama o modelo do chat para criar um chat
+      const chatResult = await ChatModel.criarChat(mestre);
+
+      if (chatResult.error) {
+        throw new Error(`Erro ao criar chat: ${chatResult.error}`);
       }
 
-      static async criarMesa(mesa) {
-        return await MesaModel.criarMesa(mesa);
-      }
-      
+      const chatId = chatResult.data[0].id
+
+      // Chama o modelo da mesa para criar uma mesa usando o ID do chat
+      const { result, error } = await MesaModel.criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas, chatId);
+
+      return { result, error };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
 }
 
 module.exports = MesaService;

@@ -16,14 +16,33 @@ class MesaModel {
         }
       }
 
-      static async criarMesa(mesa) {
+      static async criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas, chat) {
         try {
-          const { data, error } = await supabase.from('mesa').upsert([mesa])
-          return { data, error };
+          const { result, error } = await supabase
+            .from('mesa')
+            .insert([
+              {
+                mestre,
+                titulo,
+                subtitulo,
+                sistema,
+                descricao,
+                data,
+                horario,
+                periodo,
+                preco,
+                vagas,
+                chat
+              }
+            ])
+            .select();
+      
+          return { result, error };
         } catch (error) {
-          return { error };
+          return { error: error.message };
         }
       }
+      
 
 
 }
