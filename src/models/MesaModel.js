@@ -12,7 +12,16 @@ class MesaModel {
           const { data, error } = await supabase.from('mesa').select('*');
           return { data, error };
         } catch (error) {
-          return { error };
+          return { error: error.message };
+        }
+      }
+
+      static async buscarMesa(id) {
+        try {
+          const { data, error } = await supabase.from('mesa').select('*').eq('id',id);
+          return { data, error };
+        } catch (error) {
+          return { error: error.message };
         }
       }
 

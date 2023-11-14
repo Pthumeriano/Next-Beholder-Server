@@ -8,6 +8,10 @@ class MesaService {
     return await MesaModel.listarMesas();
   }
 
+  static async buscarMesa(id) {
+    return await MesaModel.buscarMesa(id);
+  }
+
   static async criarMesa(token, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas) {
     try {
       const decoded = jwt.verify(token, process.env.SECRET_KEY);

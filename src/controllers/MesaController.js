@@ -18,6 +18,20 @@ const listarMesas = async (req, res) => {
 
 }
 
+const buscarMesa = async (req, res) => {
+  try {
+    const {data, error} = await MesaService.buscarMesa(req.body.id);
+
+    if(error){
+      throw new Error(`Erro ao buscar mesa: ${error.message}`)
+    }
+    res.json(data)
+
+  } catch (error) {
+    res.stats(500).json({error: error.message})
+  }
+}
+
 const criarMesa = async (req, res) => {
     try {
       const { titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas } = req.body;
@@ -40,5 +54,6 @@ const criarMesa = async (req, res) => {
 
 module.exports = {
     listarMesas,
-    criarMesa
+    criarMesa,
+    buscarMesa
 }
