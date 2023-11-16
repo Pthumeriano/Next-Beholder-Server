@@ -34,7 +34,13 @@ const removerUsuarioDoChat = async (req, res) => {
   }
 };
 
+const listarUsuarioChat = async (req, res) => {
+  const result = await UsuarioChatService.listarUsuarioChat();
+  res.json(result)
+}
+
 module.exports = {
   adicionarUsuarioNoChat,
   removerUsuarioDoChat,
+  listarUsuarioChat
 };

@@ -9,4 +9,7 @@ router.post('/:chatId/adicionar', AuthMiddleware, UsuarioChatController.adiciona
 // Remover usuário do chat
 router.post('/:chatId/remover', AuthMiddleware, UsuarioChatController.removerUsuarioDoChat);
 
+//listar a relação Usuario - Chat
+router.get('/', UsuarioChatController.listarUsuarioChat);
+
 module.exports = router;

@@ -22,6 +22,10 @@ class UsuarioChatService {
     const { data, error } = await UsuarioChatModel.removerUsuarioDoChat(usuarioId, chatId);
     return { data, error };
   }
+
+  static async listarUsuarioChat(){
+    return await UsuarioChatModel.listarUsuarioChat();
+  }
 }
 
 module.exports = UsuarioChatService;

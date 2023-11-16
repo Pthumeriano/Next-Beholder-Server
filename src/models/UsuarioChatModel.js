@@ -41,6 +41,18 @@ class UsuarioChatModel {
     }
   }
 
+  static async listarUsuarioChat() {
+    try {
+      const { data, error } = await supabase
+        .from('usuariochat')
+        .select('*')
+
+      return { data, error };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
 }
 
 module.exports = UsuarioChatModel;
