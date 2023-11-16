@@ -37,7 +37,7 @@ const criarMesa = async (req, res) => {
     try {
       const { titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas } = req.body;
   
-      const mestre = req.usuarioAutenticado;
+      const mestre = req.usuarioAutenticado.userId;
   
       const result = await MesaService.criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas);
   
@@ -54,7 +54,7 @@ const criarMesa = async (req, res) => {
   const excluirMesa = async (req, res) => {
     try {
   
-      const result = await MesaService.excluirMesa(req.usuarioAutenticado, req.body.id)
+      const result = await MesaService.excluirMesa(req.usuarioAutenticado.userId, req.body.id)
       
       console.log(result)
 
@@ -73,7 +73,7 @@ const criarMesa = async (req, res) => {
     try {
       const { id: mesaId } = req.params;
 
-      const mesa = await MesaService.buscarMesaMestre(req.usuarioAutenticado, mesaId);
+      const mesa = await MesaService.buscarMesaMestre(req.usuarioAutenticado.userId, mesaId);
   
       if (!mesa || !mesa.data || mesa.data.length === 0) {
         throw new Error("Você não tem permissão para alterar essa mesa");
