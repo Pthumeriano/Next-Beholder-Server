@@ -3,10 +3,8 @@ const router = express.Router();
 
 const UsuarioController = require('../controllers/UsuarioController');
 
-const AuthMiddleware = require('../middlewares/autenticacaoMiddleware');
+const AuthMiddleware = require('../middlewares/AutenticacaoMiddleware');
 const Validacao = require('../middlewares/ValidacaoMiddleware')
-
-
 
 router.get('/usuarios', UsuarioController.listarUsuarios);
 router.get('/usuario', UsuarioController.buscarUsuario);

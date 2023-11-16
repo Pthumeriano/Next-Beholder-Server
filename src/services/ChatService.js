@@ -18,36 +18,26 @@ class ChatService {
         return await ChatModel.buscarChat(id);
     }
 
-    static async excluirChat(id, token){
+    static async excluirChat(id, mestre){
 
-        const decoded = jwt.verify(token, process.env.SECRET_KEY);
-        const userId = decoded.userId;
-
-        const chat = await ChatModel.buscarChatMestre(id, userId)
-
-        console.log('Token: ' + token)
-        console.log('ID: ' + userId)
-        console.log('ID chat: ' + id)
+        const chat = await ChatModel.buscarChatMestre(id, mestre)
 
         if (!chat.data || chat.data.length === 0) {
             return { error: 'Chat não encontrado' };
         }
 
-        return await ChatModel.excluirChat(id, userId);
+        return await ChatModel.excluirChat(id, mestre);
     }
 
-    static async criarChat(token){
+    static async criarChat(mestre){
 
-        const decoded = jwt.verify(token, process.env.SECRET_KEY);
-        const userId = decoded.userId;
-
-        const usuario = await UsuarioService.buscarUsuario(userId)
+        const usuario = await UsuarioService.buscarUsuario(mestre)
         
         if (!usuario.data || usuario.data.length === 0) {
             return { error: 'Mestre da mesa inválido' };
         }
 
-        return await ChatModel.criarChat(userId);
+        return await ChatModel.criarChat(mestre);
     }
 
 }

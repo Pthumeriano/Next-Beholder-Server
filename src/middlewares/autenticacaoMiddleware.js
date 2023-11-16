@@ -1,4 +1,3 @@
-// autenticacaoMiddleware.js
 const jwt = require('jsonwebtoken');
 
 const UsuarioModel = require('../models/UsuarioModel');

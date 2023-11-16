@@ -38,7 +38,7 @@ const buscarChat = async (req, res) => {
 
 const excluirChat = async (req, res) => {
     try {
-        const result = await ChatService.excluirChat(req.body.id, req.cookies.BeholderToken);
+        const result = await ChatService.excluirChat(req.body.id, req.usuarioAutenticado);
     
         if (result.error) {
           throw new Error(`Erro ao excluir chat: ${result.error}`);
@@ -53,7 +53,7 @@ const excluirChat = async (req, res) => {
 const criarChat = async (req, res) => {
     try {
 
-        const result = await ChatService.criarChat(req.cookies.BeholderToken);
+        const result = await ChatService.criarChat(req.usuarioAutenticado);
     
         if (result.error) {
           throw new Error(`Erro ao criar chat: ${result.error}`);

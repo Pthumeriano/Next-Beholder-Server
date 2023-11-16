@@ -7,12 +7,12 @@ const express = require('express');
 const router = express.Router();
 
 const ChatController = require('../controllers/ChatController')
-const autenticarMiddleware = require('../middlewares/autenticacaoMiddleware')
+const AuthMiddleware = require('../middlewares/AutenticacaoMiddleware')
 
 router.get('/chats', ChatController.listarChats);
 router.get('/chat', ChatController.buscarChat);
-router.delete('/excluir-chat', ChatController.excluirChat);
-router.post('/chat', autenticarMiddleware, ChatController.criarChat);
+router.delete('/excluir-chat', AuthMiddleware, ChatController.excluirChat);
+router.post('/chat', AuthMiddleware, ChatController.criarChat);
 
 
 module.exports = router;

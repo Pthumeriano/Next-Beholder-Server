@@ -57,11 +57,8 @@ class MesaService {
     }
   }
 
-  static async excluirMesa(token, id){
+  static async excluirMesa(mestre, id){
     try {
-
-      const decoded = jwt.verify(token, process.env.SECRET_KEY);
-      const mestre = decoded.userId;
 
       const usuarioValido = await UsuarioModel.buscarUsuario(mestre);
 
