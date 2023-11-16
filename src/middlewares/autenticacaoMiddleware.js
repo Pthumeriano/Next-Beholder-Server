@@ -1,6 +1,9 @@
+// autenticacaoMiddleware.js
 const jwt = require('jsonwebtoken');
 
-const autenticarMiddleware = (req, res, next) => {
+const UsuarioModel = require('../models/UsuarioModel');
+
+const autenticarMiddleware = async (req, res, next) => {
   const token = req.cookies.BeholderToken;
 
   if (!token) {
@@ -8,9 +11,16 @@ const autenticarMiddleware = (req, res, next) => {
   }
 
   try {
-    // Verificar e decodificar o token JWT
+
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    req.usuarioAutenticado = decoded.userId; // Adiciona o ID do usuário à requisição
+    const usuario = await UsuarioModel.buscarUsuario(decoded.userId);
+
+    if (!usuario.data || usuario.data.length === 0) {
+      return res.status(401).json({ error: 'Usuário não autenticado' });
+    }
+
+    req.usuarioAutenticado = decoded.userId;
+
     next();
   } catch (error) {
     return res.status(401).json({ error: 'Token inválido' });

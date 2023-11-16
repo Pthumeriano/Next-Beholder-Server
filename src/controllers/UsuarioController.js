@@ -63,8 +63,9 @@ const atualizarSenha = async (req, res) => {
 
 const excluirUsuario = async (req, res) => {
   try {
-    // Chama o serviço para verificar o usuário e excluir por ID
-    const result = await UsuarioService.excluirUsuario(req.cookies.BeholderToken, req.body.senha);
+
+    const { senha } = req.body;
+    const result = await UsuarioService.excluirUsuario(req.usuarioAutenticado, senha);
 
     if (result.error) {
       throw new Error(`Erro ao excluir usuário: ${result.error}`);
