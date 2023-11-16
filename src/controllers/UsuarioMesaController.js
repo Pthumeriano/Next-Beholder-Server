@@ -34,7 +34,13 @@ const removerUsuarioDaMesa = async (req, res) => {
   }
 };
 
+const listarUsuarioMesa = async (req, res) => {
+  const result = await UsuarioMesaService.listarUsuarioMesa();
+  res.json(result)
+}
+
 module.exports = {
   adicionarUsuarioNaMesa,
   removerUsuarioDaMesa,
+  listarUsuarioMesa
 };

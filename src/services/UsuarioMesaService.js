@@ -22,6 +22,11 @@ class UsuarioMesaService {
     const { data, error } = await UsuarioMesaModel.removerUsuarioDaMesa(usuarioId, mesaId);
     return { data, error };
   }
+
+  static async listarUsuarioMesa(){
+    return await UsuarioMesaModel.listarUsuarioMesa();
+  }
+
 }
 
 module.exports = UsuarioMesaService;

@@ -40,7 +40,19 @@ class UsuarioMesaModel {
     }
   }
 
-  // Outros métodos, se necessário
+  static async listarUsuarioMesa() {
+    try {
+      
+      let { data: usuariomesa, error } = await supabase
+      .from('usuariomesa')
+      .select('*');
+
+      return { usuariomesa, error };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
 }
 
 module.exports = UsuarioMesaModel;

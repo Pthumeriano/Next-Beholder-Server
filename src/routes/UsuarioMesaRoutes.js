@@ -5,6 +5,7 @@ const UsuarioMesaController = require('../controllers/UsuarioMesaController');
 
 // Adicionar usuário à mesa
 router.post('/:mesaId/adicionar', AuthMiddleware, UsuarioMesaController.adicionarUsuarioNaMesa);
+router.get('/', UsuarioMesaController.listarUsuarioMesa);
 
 // Remover usuário da mesa
 router.post('/:mesaId/remover', AuthMiddleware, UsuarioMesaController.removerUsuarioDaMesa);
