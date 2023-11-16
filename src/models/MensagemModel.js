@@ -2,12 +2,19 @@ const supabase = require('../config/supabase');
 
 class MensagemModel {
 
-    static async criarMensagem(){
+    static async criarMensagem(chat, autor, texto) {
         try {
-            return await supabase
-            .from('mensagem')
-            .select('*');
+            const { data, error } = await supabase
+                .from('mensagem')
+                .upsert([
+                    {
+                        chat,
+                        autor,
+                        texto,
+                    }
+                ], { returning: 'representation' });
 
+            return { data, error };
         } catch (error) {
             return { error: error.message };
         }

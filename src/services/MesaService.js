@@ -1,5 +1,3 @@
-const jwt = require('jsonwebtoken');
-
 const MesaModel = require('../models/MesaModel');
 const ChatModel = require('../models/ChatModel');
 const UsuarioModel = require('../models/UsuarioModel');
