@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
+const UsuarioMesaModel = require('../models/UsuarioMesaModel');
+const UsuarioChatModel = require('../models/UsuarioChatModel');
+const MesaModel = require('../models/MesaModel');
+
 const UsuarioModel = require('../models/UsuarioModel');
 
 class UsuarioService {
@@ -126,6 +130,67 @@ class UsuarioService {
       return { error: `Erro ao fazer login: ${error.message}` };
     }
   }
+
+  static async entrarNaMesa(usuarioId, mesaId) {
+    try {
+      // Verificar se o usuário já está na mesa
+      const usuarioJaNaMesa = await UsuarioMesaModel.listarMesasDoUsuario(usuarioId);
+      if (usuarioJaNaMesa.data && usuarioJaNaMesa.data.some(m => m.idmesa === mesaId)) {
+        return { error: 'O usuário já está na mesa' };
+      }
+  
+      // Verificar se há vagas disponíveis na mesa
+      const vagasDisponiveis = await MesaModel.verificarVagasDisponiveis(mesaId);
+      if (vagasDisponiveis <= 0) {
+        return { error: 'Não há vagas disponíveis na mesa' };
+      }
+  
+      // Buscar o chatId
+      const resultadoBuscarChat = await MesaModel.buscarChatMesa(mesaId);
+  
+      if (resultadoBuscarChat.error) {
+        console.error('Erro ao buscar chat da mesa:', resultadoBuscarChat.error);
+        return { error: 'Erro ao buscar chat da mesa' };
+      }
+  
+      const chatId = resultadoBuscarChat.chatId;
+  
+      // Adicionar usuário à mesa
+      const resultadoEntradaMesa = await UsuarioMesaModel.adicionarUsuarioNaMesa(usuarioId, mesaId);
+      if (resultadoEntradaMesa.error) {
+        console.error('Erro ao adicionar usuário à mesa:', resultadoEntradaMesa.error);
+        return { error: 'Erro ao adicionar usuário à mesa' };
+      }
+  
+      // Atualizar a contagem de vagas na mesa
+      const resultadoAtualizacaoVagas = await MesaModel.atualizarVagasDisponiveis(mesaId, -1);
+      if (resultadoAtualizacaoVagas.error) {
+        console.error('Erro ao atualizar a contagem de vagas na mesa:', resultadoAtualizacaoVagas.error);
+        // Se ocorrer um erro na atualização, reverta a entrada do usuário.
+        await UsuarioMesaModel.removerUsuarioDaMesa(usuarioId, mesaId);
+        return { error: 'Erro ao atualizar a contagem de vagas na mesa' };
+      }
+  
+      // Associar usuário ao chat da mesa
+      const resultadoAssociacaoChat = await UsuarioChatModel.adicionarUsuarioNoChat(usuarioId, chatId);
+      if (resultadoAssociacaoChat.error) {
+        console.error('Erro ao associar usuário ao chat:', resultadoAssociacaoChat.error);
+        // Se ocorrer um erro na associação, reverta a entrada do usuário e a atualização de vagas.
+        await UsuarioMesaModel.removerUsuarioDaMesa(usuarioId, mesaId);
+        await MesaModel.atualizarVagasDisponiveis(mesaId, 1);
+        return { error: 'Erro ao associar usuário ao chat da mesa' };
+      }
+  
+      console.log('Usuário entrou na mesa com sucesso');
+  
+      return { mensagem: 'Usuário entrou na mesa com sucesso' };
+    } catch (error) {
+      console.error('Erro ao entrar na mesa:', error.message);
+      return { error: error.message };
+    }
+  }
+  
+  
 
 }
 

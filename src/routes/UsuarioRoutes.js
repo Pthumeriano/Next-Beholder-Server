@@ -14,5 +14,6 @@ router.post('/usuarios/atualizar-email', AuthMiddleware, Validacao.validarEmail,
 router.patch('/usuarios/atualizar', AuthMiddleware, Validacao.validarAlteracaoUsuario, UsuarioController.atualizarUsuario,);
 router.delete('/usuarios/excluir', AuthMiddleware, UsuarioController.excluirUsuario);
 router.post('/usuarios/login', UsuarioController.login);
+router.post('/usuarios/entrar-na-mesa/:mesaId', AuthMiddleware, UsuarioController.entrarNaMesa);
 
 module.exports = router;

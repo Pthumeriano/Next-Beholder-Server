@@ -122,6 +122,23 @@ const login = async (req, res) => {
   }
 };
 
+const entrarNaMesa = async (req, res) => {
+  try {
+    const { mesaId } = req.params;
+    const  userId  = req.usuarioAutenticado.userId;
+
+    const resultadoEntradaMesa = await UsuarioService.entrarNaMesa(userId, mesaId);
+
+    if (resultadoEntradaMesa.error) {
+      throw new Error(`Erro ao entrar na mesa: ${resultadoEntradaMesa.error}`);
+    }
+
+    res.json({ mensagem: 'Entrada na mesa realizada com sucesso' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   listarUsuarios,
   buscarUsuario,
@@ -131,4 +148,5 @@ module.exports = {
   login,
   atualizarUsuario,
   atualizarEmail,
+  entrarNaMesa
 };

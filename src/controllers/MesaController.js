@@ -79,7 +79,7 @@ const criarMesa = async (req, res) => {
 
       const mestre = mesa.data[0].mestre;
   
-      const { titulo, subtitulo, sistema, descricao, data, horario, periodo, preco } = req.body;
+      const { titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas } = req.body;
   
        await MesaService.alterarMesa(mestre, mesaId, {
         titulo,
@@ -90,6 +90,7 @@ const criarMesa = async (req, res) => {
         horario,
         periodo,
         preco,
+        vagas
       });
   
       res.json({ mensagem: 'Mesa alterada com sucesso!' });

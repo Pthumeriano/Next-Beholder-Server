@@ -39,6 +39,29 @@ class MesaModel {
         }
       }
 
+      static async buscarChatMesa(mesaId) {
+        try {
+          const { data, error } = await supabase
+            .from('mesa')
+            .select('chat')
+            .eq('id', mesaId);
+      
+          if (error) {
+            return { error: error.message };
+          }
+      
+          if (data && data.length > 0) {
+            return { chatId: data[0].chat, error: null };
+          }
+      
+          return { error: 'Mesa não encontrada' };
+        } catch (error) {
+          return { error: error.message };
+        }
+      }
+      
+      
+
       static async criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas, chat) {
         try {
           const { result, error } = await supabase
@@ -103,6 +126,41 @@ class MesaModel {
             .update(novosDados)
             .eq('id', id);
     
+          return { data, error };
+        } catch (error) {
+          return { error: error.message };
+        }
+      }
+
+      static async verificarVagasDisponiveis(mesaId) {
+        try {
+          const { data, error } = await supabase
+            .from('mesa')
+            .select('vagas')
+            .eq('id', mesaId);
+    
+          if (error) {
+            throw new Error(error.message);
+          }
+    
+          if (data && data.length > 0) {
+            const vagas = data[0].vagas;
+            return vagas;
+          }
+    
+          throw new Error('Mesa não encontrada');
+        } catch (error) {
+          throw new Error(error.message);
+        }
+      }
+    
+      static async atualizarVagasDisponiveis(mesaId, quantidade) {
+        try {
+          const { data, error } = await supabase
+            .from('mesa')
+            .update({ vagas: quantidade })
+            .eq('id', mesaId);
+      
           return { data, error };
         } catch (error) {
           return { error: error.message };
