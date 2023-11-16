@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+
 const MesaModel = require('../models/MesaModel');
 const ChatModel = require('../models/ChatModel');
 const UsuarioModel = require('../models/UsuarioModel')
@@ -11,6 +12,25 @@ class MesaService {
 
   static async buscarMesa(id) {
     return await MesaModel.buscarMesa(id);
+  }
+
+  static async buscarMesaMestre(token, id){
+    try {
+
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      const mestre = decoded.userId;
+
+      const usuarioValido = await UsuarioModel.buscarUsuario(mestre);
+
+      if (!usuarioValido.data || usuarioValido.data.length === 0) {
+        return { error: 'Sessão inválida, efetue login novamente' };
+      }
+
+      return usuarioValido;
+
+    } catch (error) {
+      return { error: error.message };
+    }
   }
 
   static async criarMesa(token, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas) {
@@ -48,7 +68,7 @@ class MesaService {
       if (!usuarioValido.data || usuarioValido.data.length === 0) {
         return { error: 'Sessão inválida, efetue login novamente' };
     }
-    
+
       const { result, error } = await MesaModel.excluirMesa(id);
 
       return { result, error };
@@ -56,8 +76,27 @@ class MesaService {
       return { error: error.message };
     }
 
-
   }
+
+  static async alterarMesa(token, id, alteracoes) {
+    try {
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      const mestre = decoded.userId;
+  
+      // Verificar se o usuário autenticado é o mestre da mesa
+      const mesaExistente = await MesaModel.buscarMesaMestre(mestre, id);
+
+      if (!mesaExistente.data || mesaExistente.data.length === 0) {
+        return { error: 'Você não tem permissão para alterar esta mesa.' };
+      }
+  
+      return await MesaModel.alterarMesa(id, alteracoes);
+
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+  
 
 }
 

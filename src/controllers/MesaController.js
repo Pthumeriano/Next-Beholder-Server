@@ -67,10 +67,44 @@ const criarMesa = async (req, res) => {
 
   }
 
+  const alterarMesa = async (req, res) => {
+    try {
+      const userId = req.cookies.BeholderToken;
+      const { id: mesaId } = req.params;
+  
+      const mestre = await MesaService.buscarMesaMestre(userId, mesaId);
+
+  
+      if (!mestre || !mestre.data || mestre.data.length === 0) {
+        throw new Error("Você não tem permissão para alterar essa mesa");
+      }
+  
+      const { titulo, subtitulo, sistema, descricao, data, horario, periodo, preco } = req.body;
+  
+      await MesaService.alterarMesa(userId, mesaId, {
+        titulo,
+        subtitulo,
+        sistema,
+        descricao,
+        data,
+        horario,
+        periodo,
+        preco,
+      });
+  
+      res.json({ mensagem: 'Mesa alterada com sucesso!' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+  
+
+
 
 module.exports = {
     listarMesas,
     criarMesa,
     buscarMesa,
-    excluirMesa
+    excluirMesa,
+    alterarMesa
 }

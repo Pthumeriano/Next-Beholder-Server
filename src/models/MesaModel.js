@@ -26,6 +26,19 @@ class MesaModel {
         }
       }
 
+      static async buscarMesaMestre(mestreId, mesaId) {
+        try {
+          return await supabase
+            .from('mesa')
+            .select('*')
+            .eq('mestre', mestreId)
+            .eq('id', mesaId);
+    
+        } catch (error) {
+          return { error: error.message };
+        }
+      }
+
       static async criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas, chat) {
         try {
           const { result, error } = await supabase
@@ -77,6 +90,20 @@ class MesaModel {
           }
 
           return { mensagem: 'Mesa excluída com sucesso' };
+        } catch (error) {
+          return { error: error.message };
+        }
+      }
+
+      static async alterarMesa(id, novosDados) {
+        try {
+
+          const { data, error } = await supabase
+            .from('mesa')
+            .update(novosDados)
+            .eq('id', id);
+    
+          return { data, error };
         } catch (error) {
           return { error: error.message };
         }
