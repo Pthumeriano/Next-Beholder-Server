@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const MesaModel = require('../models/MesaModel');
 const ChatModel = require('../models/ChatModel');
+const UsuarioModel = require('../models/UsuarioModel')
 
 class MesaService {
 
@@ -14,6 +15,7 @@ class MesaService {
 
   static async criarMesa(token, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas) {
     try {
+
       const decoded = jwt.verify(token, process.env.SECRET_KEY);
       const mestre = decoded.userId;
 
@@ -34,6 +36,29 @@ class MesaService {
       return { error: error.message };
     }
   }
+
+  static async excluirMesa(token, id){
+    try {
+
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      const mestre = decoded.userId;
+
+      const usuarioValido = await UsuarioModel.buscarUsuario(mestre);
+
+      if (!usuarioValido.data || usuarioValido.data.length === 0) {
+        return { error: 'Sessão inválida, efetue login novamente' };
+    }
+    
+      const { result, error } = await MesaModel.excluirMesa(id);
+
+      return { result, error };
+    } catch (error) {
+      return { error: error.message };
+    }
+
+
+  }
+
 }
 
 module.exports = MesaService;

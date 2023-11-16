@@ -3,6 +3,7 @@
 */
 
 const supabase = require('../config/supabase');
+const ChatModel = require('../models/ChatModel')
 
 class MesaModel {
 
@@ -52,7 +53,34 @@ class MesaModel {
         }
       }
       
+      //basta excluri o chat associado
+      static async excluirMesa(id) {
+        try {
+          // Buscar informações da mesa para obter o ID do chat associado
+          const { data: mesaInfo, error: mesaError } = await supabase
+            .from('mesa')
+            .select('id, chat')
+            .eq('id', id)
+            .single();
+    
+          if (mesaError) {
+            return { error: mesaError.message };
+          }
+          
+          const chatId = mesaInfo.chat;
 
+          // Excluir o chat associado à mesa usando o modelo do Chat
+          const { error: chatError } = await ChatModel.excluirChat(chatId);
+    
+          if (chatError) {
+            return { error: `Erro ao excluir chat: ${chatError.message}` };
+          }
+
+          return { mensagem: 'Mesa excluída com sucesso' };
+        } catch (error) {
+          return { error: error.message };
+        }
+      }
 
 }
 

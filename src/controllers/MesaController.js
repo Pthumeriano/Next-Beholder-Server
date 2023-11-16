@@ -51,9 +51,26 @@ const criarMesa = async (req, res) => {
     }
   };
 
+  const excluirMesa = async (req, res) => {
+    try {
+  
+      const result = await MesaService.excluirMesa(req.cookies.BeholderToken, req.body.id)
+  
+      if (result.error) {
+        throw new Error(`Erro ao excluir mesa: ${result.error}`);
+      }
+  
+      res.json({ mensagem: 'Mesa excluida com sucesso!', mesa: result.result });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+
+  }
+
 
 module.exports = {
     listarMesas,
     criarMesa,
-    buscarMesa
+    buscarMesa,
+    excluirMesa
 }
