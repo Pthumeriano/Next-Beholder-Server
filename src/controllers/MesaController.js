@@ -55,7 +55,9 @@ const criarMesa = async (req, res) => {
     try {
   
       const result = await MesaService.excluirMesa(req.usuarioAutenticado, req.body.id)
-  
+      
+      console.log(result)
+
       if (result.error) {
         throw new Error(`Erro ao excluir mesa`);
       }
