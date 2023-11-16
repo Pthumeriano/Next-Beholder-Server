@@ -15,17 +15,24 @@ const validarNovoUsuario = [
 ];
 
 const validarAtualizacaoSenha = [
-    body('senhaAntiga').notEmpty().withMessage('Senha antiga é obrigatória'),
-    body('novaSenha').isLength({ min: 6 }).withMessage('A nova senha deve ter pelo menos 6 caracteres'),
-  
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+  body('senhaAntiga').notEmpty().withMessage('Senha antiga é obrigatória'),
+  body('novaSenha')
+    .isLength({ min: 6 }).withMessage('A nova senha deve ter pelo menos 6 caracteres')
+    .custom((value, { req }) => {
+      if (value === req.body.senhaAntiga) {
+        throw new Error('A nova senha deve ser diferente da senha antiga');
       }
-      next();
-    },
-  ];
+      return true;
+    }),
+  
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];
 
   const validarLogin = [
     body('email').isEmail().withMessage('O email deve ser válido'),
