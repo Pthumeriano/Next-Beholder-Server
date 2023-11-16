@@ -1,6 +1,7 @@
 /*
   A mesa tem um chat, precisa chamar a criação do chat na hora de criar a mesa e passar o id pro serviço da Mesa
 */
+
 const MesaService = require('../services/MesaService');
 
 const listarMesas = async (req, res) => {
@@ -36,10 +37,9 @@ const criarMesa = async (req, res) => {
     try {
       const { titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas } = req.body;
   
-      const userId = req.cookies.BeholderToken;
+      const mestre = req.usuarioAutenticado;
   
-      // Chama o serviço da mesa para criar a mesa, passando os detalhes da mesa
-      const result = await MesaService.criarMesa(userId, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas);
+      const result = await MesaService.criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas);
   
       if (result.error) {
         throw new Error(`Erro ao criar mesa: ${result.error}`);
@@ -54,10 +54,10 @@ const criarMesa = async (req, res) => {
   const excluirMesa = async (req, res) => {
     try {
   
-      const result = await MesaService.excluirMesa(req.cookies.BeholderToken, req.body.id)
+      const result = await MesaService.excluirMesa(req.usuarioAutenticado, req.body.id)
   
       if (result.error) {
-        throw new Error(`Erro ao excluir mesa: ${result.error}`);
+        throw new Error(`Erro ao excluir mesa`);
       }
   
       res.json({ mensagem: 'Mesa excluida com sucesso!', mesa: result.result });
@@ -69,19 +69,19 @@ const criarMesa = async (req, res) => {
 
   const alterarMesa = async (req, res) => {
     try {
-      const userId = req.cookies.BeholderToken;
       const { id: mesaId } = req.params;
-  
-      const mestre = await MesaService.buscarMesaMestre(userId, mesaId);
 
+      const mesa = await MesaService.buscarMesaMestre(req.usuarioAutenticado, mesaId);
   
-      if (!mestre || !mestre.data || mestre.data.length === 0) {
+      if (!mesa || !mesa.data || mesa.data.length === 0) {
         throw new Error("Você não tem permissão para alterar essa mesa");
       }
+
+      const mestre = mesa.data[0].mestre;
   
       const { titulo, subtitulo, sistema, descricao, data, horario, periodo, preco } = req.body;
   
-      await MesaService.alterarMesa(userId, mesaId, {
+       await MesaService.alterarMesa(mestre, mesaId, {
         titulo,
         subtitulo,
         sistema,
@@ -98,8 +98,6 @@ const criarMesa = async (req, res) => {
     }
   };
   
-
-
 
 module.exports = {
     listarMesas,

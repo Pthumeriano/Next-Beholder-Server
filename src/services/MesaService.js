@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 
 const MesaModel = require('../models/MesaModel');
 const ChatModel = require('../models/ChatModel');
-const UsuarioModel = require('../models/UsuarioModel')
 
 class MesaService {
 
@@ -14,16 +13,13 @@ class MesaService {
     return await MesaModel.buscarMesa(id);
   }
 
-  static async buscarMesaMestre(token, id){
+  static async buscarMesaMestre(mestre, id){
     try {
 
-      const decoded = jwt.verify(token, process.env.SECRET_KEY);
-      const mestre = decoded.userId;
-
-      const usuarioValido = await UsuarioModel.buscarUsuario(mestre);
+      const usuarioValido = await MesaModel.buscarMesaMestre(mestre, id)
 
       if (!usuarioValido.data || usuarioValido.data.length === 0) {
-        return { error: 'Sessão inválida, efetue login novamente' };
+        return;
       }
 
       return usuarioValido;
@@ -33,13 +29,9 @@ class MesaService {
     }
   }
 
-  static async criarMesa(token, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas) {
+  static async criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas) {
     try {
 
-      const decoded = jwt.verify(token, process.env.SECRET_KEY);
-      const mestre = decoded.userId;
-
-      // Chama o modelo do chat para criar um chat
       const chatResult = await ChatModel.criarChat(mestre);
 
       if (chatResult.error) {
@@ -48,7 +40,6 @@ class MesaService {
 
       const chatId = chatResult.data[0].id
 
-      // Chama o modelo da mesa para criar uma mesa usando o ID do chat
       const { result, error } = await MesaModel.criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas, chatId);
 
       return { result, error };
@@ -75,12 +66,9 @@ class MesaService {
 
   }
 
-  static async alterarMesa(token, id, alteracoes) {
+  static async alterarMesa(mestre, id, alteracoes) {
     try {
-      const decoded = jwt.verify(token, process.env.SECRET_KEY);
-      const mestre = decoded.userId;
-  
-      // Verificar se o usuário autenticado é o mestre da mesa
+
       const mesaExistente = await MesaModel.buscarMesaMestre(mestre, id);
 
       if (!mesaExistente.data || mesaExistente.data.length === 0) {

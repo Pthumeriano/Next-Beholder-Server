@@ -3,10 +3,12 @@ const router = express.Router();
 
 const MesaController = require('../controllers/MesaController')
 
+const AuthMiddleware = require('../middlewares/AutenticacaoMiddleware')
+
 router.get('/mesas', MesaController.listarMesas);
-router.post('/mesas', MesaController.criarMesa);
+router.post('/mesas', AuthMiddleware, MesaController.criarMesa);
 router.get('/mesa', MesaController.buscarMesa);
-router.delete('/mesa', MesaController.excluirMesa)
-router.patch('/mesa/:id', MesaController.alterarMesa);
+router.delete('/mesa', AuthMiddleware, MesaController.excluirMesa)
+router.patch('/mesa/:id', AuthMiddleware, MesaController.alterarMesa);
 
 module.exports = router;
