@@ -3,7 +3,7 @@ const UsuarioChatService = require('../services/UsuarioChatService');
 const adicionarUsuarioNoChat = async (req, res) => {
   try {
     const { chatId } = req.params;
-    const { userId } = req.usuarioAutenticado;
+    const { userId } = req.usuarioAutenticado.userId;
 
     const result = await UsuarioChatService.adicionarUsuarioNoChat(userId, chatId);
 
@@ -20,7 +20,7 @@ const adicionarUsuarioNoChat = async (req, res) => {
 const removerUsuarioDoChat = async (req, res) => {
   try {
     const { chatId } = req.params;
-    const { userId } = req.usuarioAutenticado;
+    const { userId } = req.usuarioAutenticado.userId;
 
     const result = await UsuarioChatService.removerUsuarioDoChat(userId, chatId);
 

@@ -3,7 +3,7 @@ const UsuarioMesaService = require('../services/UsuarioMesaService');
 const adicionarUsuarioNaMesa = async (req, res) => {
   try {
     const { mesaId } = req.params;
-    const { userId } = req.usuarioAutenticado;
+    const { userId } = req.usuarioAutenticado.userId;
 
     const result = await UsuarioMesaService.adicionarUsuarioNaMesa(userId, mesaId);
 
@@ -20,7 +20,7 @@ const adicionarUsuarioNaMesa = async (req, res) => {
 const removerUsuarioDaMesa = async (req, res) => {
   try {
     const { mesaId } = req.params;
-    const { userId } = req.usuarioAutenticado;
+    const { userId } = req.usuarioAutenticado.userId;
 
     const result = await UsuarioMesaService.removerUsuarioDaMesa(userId, mesaId);
 
