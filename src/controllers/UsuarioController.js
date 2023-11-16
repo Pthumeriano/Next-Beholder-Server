@@ -13,7 +13,6 @@ const listarUsuarios = async (req, res) => {
 };
 
 const buscarUsuario = async (req, res) => {
-
   try {
     const { data, error } = await UsuarioService.buscarUsuario(req.body.id);
     if (error) {
@@ -49,7 +48,7 @@ const atualizarSenha = async (req, res) => {
     const { senhaAntiga, novaSenha } = req.body;
 
     // Chama o serviço para atualizar a senha
-    const result = await UsuarioService.atualizarSenha(senhaAntiga, novaSenha, req.usuarioAutenticado);
+    const result = await UsuarioService.atualizarSenha(senhaAntiga, novaSenha, req.usuarioAutenticado.userId);
 
     if (result.error) {
       throw new Error(`Erro ao atualizar a senha: ${result.error}`);
@@ -61,11 +60,45 @@ const atualizarSenha = async (req, res) => {
   }
 };
 
+const atualizarUsuario = async (req, res) => {
+  try {
+    const novosDados = req.body;
+
+    const result = await UsuarioService.atualizarUsuario(req.usuarioAutenticado.userId, novosDados);
+
+    if (result.error) {
+      throw new Error(`Erro ao alterar usuário: ${result.error}`);
+    }
+
+    res.json({ mensagem: 'Usuário alterado com sucesso!', usuario: result.data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const atualizarEmail = async (req, res) => {
+  try {
+    
+    const { senha, email } = req.body;
+
+    const result = await UsuarioService.atualizarEmail(req.usuarioAutenticado.userId, req.usuarioAutenticado.email, senha, email);
+
+    if (result.error) {
+      throw new Error(`Erro ao alterar e-mail: ${result.error}`);
+    }
+
+    res.json({ mensagem: 'E-mail alterado com sucesso!', usuario: result.data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 const excluirUsuario = async (req, res) => {
   try {
-
     const { senha } = req.body;
-    const result = await UsuarioService.excluirUsuario(req.usuarioAutenticado, senha);
+    
+    const result = await UsuarioService.excluirUsuario(req.usuarioAutenticado.userId, senha);
 
     if (result.error) {
       throw new Error(`Erro ao excluir usuário: ${result.error}`);
@@ -89,13 +122,13 @@ const login = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   listarUsuarios,
   buscarUsuario,
   criarNovoUsuario,
   atualizarSenha,
   excluirUsuario,
-  login
+  login,
+  atualizarUsuario,
+  atualizarEmail,
 };

@@ -18,7 +18,10 @@ const autenticarMiddleware = async (req, res, next) => {
       return res.status(401).json({ error: 'Usuário não autenticado' });
     }
 
-    req.usuarioAutenticado = decoded.userId;
+    req.usuarioAutenticado = {
+      userId: decoded.userId,
+      email: usuario.data[0].email,
+    };
 
     next();
   } catch (error) {

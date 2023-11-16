@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const UsuarioModel = require('../models/UsuarioModel');
 
@@ -28,20 +29,22 @@ class UsuarioService {
 
       return result;
     } catch (error) {
+
       return { error: error.message };
     }
   }
 
-  static async excluirUsuario(usuarioAutenticado, senha) {
+  static async atualizarEmail(id, email, senha, novoEmail){
     try {
 
-      const usuario = await UsuarioModel.buscarUsuarioPoridSenha(usuarioAutenticado, senha);
-  
+      const usuario = await UsuarioModel.buscarUsuarioEmailSenha(email, senha);
+      
       if (!usuario.data || usuario.data.length === 0) {
         return { error: 'Usuário não encontrado ou senha incorreta' };
       }
       
-      const result = await UsuarioModel.excluirUsuarioPorId(usuarioAutenticado);
+      // Atualiza o email
+      const result = await UsuarioModel.atualizarEmail(id, novoEmail);
   
       return result;
     } catch (error) {
@@ -49,13 +52,57 @@ class UsuarioService {
     }
   }
 
+  static async atualizarUsuario(usuarioAutenticado, novosDados){
+    try {
+      
+      const usuario = await UsuarioModel.buscarUsuario(usuarioAutenticado);
+  
+      if (!usuario.data || usuario.data.length === 0) {
+        return { error: 'Usuário não encontrado' };
+      }
+
+      const result = await UsuarioModel.atualizarUsuario(usuarioAutenticado, novosDados);
+
+      return result;
+
+    } catch (error) {
+
+      return { error: error.message };
+    }
+  }
+
+  static async excluirUsuario(usuarioAutenticado, senha) {
+    try {
+      const userId = usuarioAutenticado;
+  
+      const usuario = await UsuarioModel.buscarUsuarioPoridSenha(userId, senha);
+
+      if (!usuario.data || usuario.data.length === 0) {
+        return { error: 'Usuário não encontrado ou senha incorreta' };
+      }
+  
+      const result = await UsuarioModel.excluirUsuarioPorId(userId);
+  
+      return result;
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+  
+
   static async login(email, senha, res) {
     try {
-      // Chama o método do modelo para buscar o usuário por email e senha
-      const usuario = await UsuarioModel.buscarUsuarioPorEmailSenha(email, senha);
 
-      // Verifica se o usuário foi encontrado
+      const usuario = await UsuarioModel.buscarUsuarioEmail(email);
+
+
       if (!usuario.data || usuario.data.length === 0) {
+        return { error: 'Credenciais inválidas' };
+      }
+
+      const senhaCorreta = await bcrypt.compare(senha, usuario.data[0].senha);
+
+      if (!senhaCorreta) {
         return { error: 'Credenciais inválidas' };
       }
 
@@ -73,9 +120,6 @@ class UsuarioService {
 
       // Adiciona o cookie à resposta
       res.cookie(cookieName, token, cookieOptions);
-      console.log("Cookie: " + cookieName);
-      console.log("Token: " + token);
-      console.log("Options: " + cookieOptions.expires);
 
       return { mensagem: 'Login bem-sucedido', usuario: usuario.data[0] };
     } catch (error) {

@@ -14,6 +14,44 @@ const validarNovoUsuario = [
   },
 ];
 
+const validarAlteracaoUsuario = [
+  body('nome')
+    .notEmpty().withMessage('O nome é obrigatório')
+    .custom((value) => /^[a-zA-Z\s]*$/.test(value)).withMessage('O nome não pode conter números')
+    .isLength({ max: 22 }).withMessage('O nome não pode ter mais de 22 caracteres')
+    .optional(),
+
+  body('datanascimento')
+    .optional()
+    .isISO8601().withMessage('A data de nascimento deve ser uma data válida'),
+
+  body('telefone')
+    .optional()
+    .matches(/^[0-9-]+$/).withMessage('O telefone deve conter apenas números e hífens'),
+
+  body('descricao')
+    .optional()
+    .isLength({ max: 100 }).withMessage('A descrição não pode ter mais de 100 caracteres'),
+
+  (req, res, next) => {
+    
+    const camposIndesejados = ['email', 'senha'];
+    const corpoRequisicao = Object.keys(req.body);
+
+    if (camposIndesejados.some((campo) => corpoRequisicao.includes(campo))) {
+      return res.status(400).json({ error: 'Não é permitido alterar o email ou senha por este meio' });
+    }
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    next();
+  },
+];
+
 const validarAtualizacaoSenha = [
   body('senhaAntiga').notEmpty().withMessage('Senha antiga é obrigatória'),
   body('novaSenha')
@@ -96,5 +134,20 @@ const validarAtualizacaoSenha = [
     },
   ];
 
+  const validarEmail = [
+    body('email')
+      .notEmpty().withMessage('O e-mail é obrigatório')
+      .isEmail().withMessage('E-mail inválido'),
+  
+    (req, res, next) => {
+      const errors = validationResult(req);
+  
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+  
+      next();
+    },
+  ];
 
-module.exports = { validarNovoUsuario, validarAtualizacaoSenha, validarLogin, validarCriacaoMesa  };
+module.exports = { validarNovoUsuario, validarAtualizacaoSenha, validarAlteracaoUsuario, validarLogin, validarCriacaoMesa, validarEmail  };
