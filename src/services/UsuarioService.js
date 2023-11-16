@@ -15,23 +15,16 @@ class UsuarioService {
     return await UsuarioModel.criarNovoUsuario(usuario);
   }
 
-  static async atualizarSenha(senhaAntiga, novaSenha, token) {
+  static async atualizarSenha(senhaAntiga, novaSenha, usuarioAutenticado) {
     try {
-      // Verifica se o usuário está autenticado
-      const decoded = jwt.verify(token, process.env.SECRET_KEY);
-      const userId = decoded.userId;
 
-      // Chama o método do modelo para buscar o usuário por ID e senha
-      console.log(decoded)
-      const usuario = await UsuarioModel.buscarUsuarioPoridSenha(userId, senhaAntiga);
-
-      // Verifica se o usuário com o ID e senha fornecidos existe
+      const usuario = await UsuarioModel.buscarUsuarioPoridSenha(usuarioAutenticado, senhaAntiga);
+  
       if (!usuario.data || usuario.data.length === 0) {
         return { error: 'Usuário não encontrado ou senha incorreta' };
       }
 
-      // Agora que sabemos que o usuário é válido, chama o método do modelo para atualizar a senha
-      const result = await UsuarioModel.atualizarSenha(userId, novaSenha);
+      const result = await UsuarioModel.atualizarSenha(usuarioAutenticado, novaSenha);
 
       return result;
     } catch (error) {
@@ -47,8 +40,6 @@ class UsuarioService {
       if (!usuario.data || usuario.data.length === 0) {
         return { error: 'Usuário não encontrado ou senha incorreta' };
       }
-
-      console.log(usuario)
       
       const result = await UsuarioModel.excluirUsuarioPorId(usuarioAutenticado);
   

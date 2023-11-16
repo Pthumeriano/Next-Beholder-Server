@@ -49,7 +49,7 @@ const atualizarSenha = async (req, res) => {
     const { senhaAntiga, novaSenha } = req.body;
 
     // Chama o serviço para atualizar a senha
-    const result = await UsuarioService.atualizarSenha(senhaAntiga, novaSenha, req.cookies.BeholderToken);
+    const result = await UsuarioService.atualizarSenha(senhaAntiga, novaSenha, req.usuarioAutenticado);
 
     if (result.error) {
       throw new Error(`Erro ao atualizar a senha: ${result.error}`);
