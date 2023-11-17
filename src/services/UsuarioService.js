@@ -197,7 +197,7 @@ class UsuarioService {
       if (!usuarioNaMesa.data || !usuarioNaMesa.data.some(m => m.idmesa === mesaId)) {
         return { error: 'O usuário não está na mesa' };
       }
-
+  
       const resultadoBuscarChat = await MesaModel.buscarChatMesa(mesaId);
   
       if (resultadoBuscarChat.error) {
@@ -213,19 +213,35 @@ class UsuarioService {
         console.error('Erro ao remover usuário da mesa:', resultadoRemoverUsuario.error);
         return { error: 'Erro ao remover usuário da mesa' };
       }
-
+  
       // Desassociar usuário ao chat da mesa
       const resultadoAssociacaoChat = await UsuarioChatModel.removerUsuarioDoChat(usuarioId, chatId);
       if (resultadoAssociacaoChat.error) {
-         console.error('Erro ao desassociar usuário ao chat:', resultadoAssociacaoChat.error);
-         return { error: 'Erro ao desassociar usuário ao chat da mesa' };
+        console.error('Erro ao desassociar usuário ao chat:', resultadoAssociacaoChat.error);
+        return { error: 'Erro ao desassociar usuário ao chat da mesa' };
       }
   
-      // Atualizar a contagem de vagas na mesa
-      const resultadoAtualizacaoVagas = await MesaModel.addicionarvaga(mesaId);
-      if (resultadoAtualizacaoVagas.error) {
-        console.error('Erro ao atualizar a contagem de vagas na mesa:', resultadoAtualizacaoVagas.error);
-        return { error: 'Erro ao atualizar a contagem de vagas na mesa' };
+      // Verificar se o usuário é o mestre da mesa
+      const mesaInfo = await MesaModel.buscarMesaMestre(usuarioId, mesaId);
+      if (mesaInfo.error) {
+        console.error('Erro ao buscar informações da mesa:', mesaInfo.error);
+        return { error: 'Erro ao buscar informações da mesa' };
+      }
+  
+      // Se o usuário for o mestre, exclua a mesa
+      if (mesaInfo.data.length > 0) {
+        const resultadoExcluirMesa = await MesaModel.excluirMesa(mesaId);
+        if (resultadoExcluirMesa.error) {
+          console.error('Erro ao excluir a mesa:', resultadoExcluirMesa.error);
+          return { error: 'Erro ao excluir a mesa' };
+        }
+      } else {
+        // Se não for o mestre, apenas atualize a contagem de vagas na mesa
+        const resultadoAtualizacaoVagas = await MesaModel.adicionarVaga(mesaId);
+        if (resultadoAtualizacaoVagas.error) {
+          console.error('Erro ao atualizar a contagem de vagas na mesa:', resultadoAtualizacaoVagas.error);
+          return { error: 'Erro ao atualizar a contagem de vagas na mesa' };
+        }
       }
   
       console.log('Usuário saiu da mesa com sucesso');
@@ -236,6 +252,8 @@ class UsuarioService {
       return { error: error.message };
     }
   }
+  
+  
   
   
   

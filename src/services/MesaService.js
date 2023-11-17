@@ -1,6 +1,6 @@
 const MesaModel = require('../models/MesaModel');
 const ChatModel = require('../models/ChatModel');
-const UsuarioModel = require('../models/UsuarioModel');
+const UsuarioService = require('../services/UsuarioService');
 
 class MesaService {
 
@@ -39,9 +39,11 @@ class MesaService {
 
       const chatId = chatResult.data[0].id
 
-      const { result, error } = await MesaModel.criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas, chatId);
+      const result = await MesaModel.criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas, chatId);
 
-      return { result, error };
+      await UsuarioService.entrarNaMesa(mestre, result.data[0].id);
+
+      return {result} ;
     } catch (error) {
       return { error: error.message };
     }
@@ -50,7 +52,7 @@ class MesaService {
   static async excluirMesa(mestre, id){
     try {
 
-      const usuarioValido = await UsuarioModel.buscarUsuario(mestre);
+      const usuarioValido = await UsuarioService.buscarUsuario(mestre);
 
       if (!usuarioValido.data || usuarioValido.data.length === 0) {
         return { error: 'Sessão inválida, efetue login novamente' };

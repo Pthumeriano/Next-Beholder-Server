@@ -64,7 +64,7 @@ class MesaModel {
 
       static async criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas, chat) {
         try {
-          const { result, error } = await supabase
+          return await supabase
             .from('mesa')
             .insert([
               {
@@ -83,7 +83,6 @@ class MesaModel {
             ])
             .select();
       
-          return { result, error };
         } catch (error) {
           return { error: error.message };
         }
