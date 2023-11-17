@@ -139,6 +139,23 @@ const entrarNaMesa = async (req, res) => {
   }
 };
 
+const sairDaMesa = async (req, res) => {
+  try {
+    const { mesaId } = req.params;
+    const  userId  = req.usuarioAutenticado.userId;
+
+    const resultadoEntradaMesa = await UsuarioService.sairDaMesa(userId, mesaId);
+
+    if (resultadoEntradaMesa.error) {
+      throw new Error(`Erro ao sair na mesa: ${resultadoEntradaMesa.error}`);
+    }
+
+    res.json({ mensagem: 'Saída da mesa realizada com sucesso' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   listarUsuarios,
   buscarUsuario,
@@ -148,5 +165,6 @@ module.exports = {
   login,
   atualizarUsuario,
   atualizarEmail,
-  entrarNaMesa
+  entrarNaMesa,
+  sairDaMesa
 };

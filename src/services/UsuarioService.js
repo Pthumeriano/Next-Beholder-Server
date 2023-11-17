@@ -163,7 +163,7 @@ class UsuarioService {
       }
   
       // Atualizar a contagem de vagas na mesa
-      const resultadoAtualizacaoVagas = await MesaModel.atualizarVagasDisponiveis(mesaId, -1);
+      const resultadoAtualizacaoVagas = await MesaModel.atualizarVagasDisponiveis(mesaId);
       if (resultadoAtualizacaoVagas.error) {
         console.error('Erro ao atualizar a contagem de vagas na mesa:', resultadoAtualizacaoVagas.error);
         // Se ocorrer um erro na atualização, reverta a entrada do usuário.
@@ -189,6 +189,54 @@ class UsuarioService {
       return { error: error.message };
     }
   }
+
+  static async sairDaMesa(usuarioId, mesaId) {
+    try {
+      // Verificar se o usuário está na mesa
+      const usuarioNaMesa = await UsuarioMesaModel.listarMesasDoUsuario(usuarioId);
+      if (!usuarioNaMesa.data || !usuarioNaMesa.data.some(m => m.idmesa === mesaId)) {
+        return { error: 'O usuário não está na mesa' };
+      }
+
+      const resultadoBuscarChat = await MesaModel.buscarChatMesa(mesaId);
+  
+      if (resultadoBuscarChat.error) {
+        console.error('Erro ao buscar chat da mesa:', resultadoBuscarChat.error);
+        return { error: 'Erro ao buscar chat da mesa' };
+      }
+  
+      const chatId = resultadoBuscarChat.chatId;
+  
+      // Remover o usuário da mesa
+      const resultadoRemoverUsuario = await UsuarioMesaModel.removerUsuarioDaMesa(usuarioId, mesaId);
+      if (resultadoRemoverUsuario.error) {
+        console.error('Erro ao remover usuário da mesa:', resultadoRemoverUsuario.error);
+        return { error: 'Erro ao remover usuário da mesa' };
+      }
+
+      // Desassociar usuário ao chat da mesa
+      const resultadoAssociacaoChat = await UsuarioChatModel.removerUsuarioDoChat(usuarioId, chatId);
+      if (resultadoAssociacaoChat.error) {
+         console.error('Erro ao desassociar usuário ao chat:', resultadoAssociacaoChat.error);
+         return { error: 'Erro ao desassociar usuário ao chat da mesa' };
+      }
+  
+      // Atualizar a contagem de vagas na mesa
+      const resultadoAtualizacaoVagas = await MesaModel.addicionarvaga(mesaId);
+      if (resultadoAtualizacaoVagas.error) {
+        console.error('Erro ao atualizar a contagem de vagas na mesa:', resultadoAtualizacaoVagas.error);
+        return { error: 'Erro ao atualizar a contagem de vagas na mesa' };
+      }
+  
+      console.log('Usuário saiu da mesa com sucesso');
+  
+      return { mensagem: 'Usuário saiu da mesa com sucesso' };
+    } catch (error) {
+      console.error('Erro ao sair da mesa:', error.message);
+      return { error: error.message };
+    }
+  }
+  
   
   
 

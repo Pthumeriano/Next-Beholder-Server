@@ -154,13 +154,28 @@ class MesaModel {
         }
       }
     
-      static async atualizarVagasDisponiveis(mesaId, quantidade) {
+      static async atualizarVagasDisponiveis(mesa_id) {
         try {
-          const { data, error } = await supabase
-            .from('mesa')
-            .update({ vagas: quantidade })
-            .eq('id', mesaId);
-      
+          //chamada da função do banco
+          let { data, error } = await supabase
+            .rpc('atualizarvagas', {
+            mesa_id
+          });
+
+          return { data, error };
+        } catch (error) {
+          return { error: error.message };
+        }
+      }
+
+      static async addicionarvaga(mesa_id) {
+        try {
+          //chamada da função do banco
+          let { data, error } = await supabase
+            .rpc('adicionarvaga', {
+            mesa_id
+          });
+
           return { data, error };
         } catch (error) {
           return { error: error.message };
