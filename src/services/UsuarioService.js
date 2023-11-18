@@ -252,11 +252,22 @@ class UsuarioService {
       return { error: error.message };
     }
   }
-  
-  
-  
-  
-  
+
+  static async adicionarTema(){
+
+  }
+
+  static async removerTema(){
+    
+  }
+
+  static async listarTemasUsuario(){
+    
+  }
+
+  static async listarTemas(){
+
+  }
 
 }
 
