@@ -15,6 +15,21 @@ class TemaModel{
             return { error };
           }
       }
+
+      static async buscarTema(id){
+        try {
+    
+            const temas = await supabase
+            .from('tema')
+            .select('*')
+            .eq('id', id);
+
+            return temas;
+
+          } catch (error) {
+            return { error };
+          }
+      }
       
 }
 

@@ -261,17 +261,51 @@ class UsuarioService {
     }
   }
 
-  static async adicionarTema(usuarioId, temaId){
+  static async adicionarTema(usuarioId, temaId) {
     try {
-      return await UsuarioTemaModel.adicionarTema(usuarioId, temaId);
+      // Verificar se o tema existe
+      const tema = await TemaModel.buscarTema(temaId);
+
+      if (!tema.data || tema.data.length === 0) {
+        return { error: 'Tema inválido' };
+      }
+
+      // Verificar se o tema já foi adicionado ao usuário
+      const temaAdicionado = await UsuarioTemaModel.verificarTema(usuarioId, temaId);
+
+      if (!temaAdicionado.error) {
+        return { error: 'Tema já adicionado' };
+      }
+
+      // Adicionar tema ao usuário
+      const resultadoAdicao = await UsuarioTemaModel.adicionarTema(usuarioId, temaId);
+
+      return resultadoAdicao;
+
     } catch (error) {
       return { error: 'Erro ao adicionar tema' };
     }
-  }
+}
 
   static async removerTema(usuarioId, temaId){
       try {
+
+        // Verificar se o tema existe
+        const tema = await TemaModel.buscarTema(temaId);
+
+        if (!tema.data || tema.data.length === 0) {
+          return { error: 'Tema inválido' };
+        }
+
+        // Verificar se o tema já foi adicionado ao usuário
+        const temaAdicionado = await UsuarioTemaModel.verificarTema(usuarioId, temaId);
+
+        if (temaAdicionado.data.length === 0) {
+          return { error: 'Tema não adicionado' };
+        }
+
         return await UsuarioTemaModel.removerTema(usuarioId, temaId);
+
     } catch (error) {
       return { error: 'Erro ao remover tema' };
     }

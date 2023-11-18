@@ -32,6 +32,20 @@ class UsuarioTemaModel{
         }
       }
 
+      static async verificarTema(usuarioId, temaId) {
+        try {
+
+          return await supabase
+          .from('usuariotema')
+          .select("*")
+          .eq('idusuario', usuarioId)
+          .eq('idtema', temaId);
+
+        } catch (error) {
+          return { error };
+        }
+      }
+
       static async listarTemasUsuario(usuarioId) {
         try {
 

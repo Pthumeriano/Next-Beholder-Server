@@ -160,35 +160,34 @@ const sairDaMesa = async (req, res) => {
 
 const adicionarTema = async (req, res) => {
   try {
+    const temaId = req.params.idtema;
+    const userId = req.usuarioAutenticado.userId;
 
-    const  temaId  = req.params.idtema;
-    const  userId  = req.usuarioAutenticado.userId;
-    
-    const result =  await UsuarioService.adicionarTema(userId, temaId);
+    const result = await UsuarioService.adicionarTema(userId, temaId);
 
-    if(result.error){
-      console.log(result)
-      res.json('Erro ao adicionar tema')
-    }else{
-      res.json('Tema adicionado com sucesso')
+    if (result.error) {
+      res.status(400).json({ error: result.error });
+    } else {
+      res.json({ mensagem: 'Tema adicionado com sucesso' });
     }
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
+
 
 const removerTema = async (req, res) => {
   try {
+    const temaId = req.params.idtema;
+    const userId = req.usuarioAutenticado.userId;
 
-    const  temaId  = req.params.idtema;
-    const  userId  = req.usuarioAutenticado.userId;
+    const result = await UsuarioService.removerTema(userId, temaId);
 
-    console.log(temaId)
-    
-    await UsuarioService.removerTema(userId, temaId);
-
-    res.json({ mensagem: 'Tema removido com sucesso' });
+    if (result.error) {
+      res.status(400).json({ error: result.error });
+    } else {
+      res.json({ mensagem: 'Tema removido com sucesso' });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
