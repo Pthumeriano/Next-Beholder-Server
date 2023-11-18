@@ -31,10 +31,12 @@ const buscarUsuario = async (req, res) => {
 
 const criarNovoUsuario = async (req, res) => {
   try {
-    const { data, error } = await UsuarioService.criarNovoUsuario(req.body);
+    const { email } = req.body;
+    console.log(req.body)
+    const { data, error } = await UsuarioService.criarNovoUsuario(email, req.body);
 
     if (error) {
-      throw new Error(`Erro ao criar novo usuário: ${error.message}`);
+      throw new Error(`Erro ao criar novo usuário: ${error}`);
     }
 
     res.json({ mensagem: 'Novo usuário criado com sucesso!', usuario: data });
@@ -197,7 +199,7 @@ const listarTemas = async (req, res) => {
 
 const listarTemasUsuario = async (req, res) => {
   try {
-    
+
     const  userId  = req.usuarioAutenticado.userId;
     
     await UsuarioService.listarTemasUsuario(userId);

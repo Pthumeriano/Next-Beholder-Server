@@ -17,8 +17,15 @@ class UsuarioService {
     return await UsuarioModel.buscarUsuario(id);
   }
 
-  static async criarNovoUsuario(usuario) {
-    return await UsuarioModel.criarNovoUsuario(usuario);
+  static async criarNovoUsuario(email, novoUsuario) {
+
+    const usuario = await UsuarioModel.buscarUsuarioEmail(email);
+  
+    if (usuario.data && usuario.data.length > 0) {
+      return { error: 'Email já cadastrado' };
+    }
+
+    return await UsuarioModel.criarNovoUsuario(novoUsuario);
   }
 
   static async atualizarSenha(senhaAntiga, novaSenha, usuarioAutenticado) {
