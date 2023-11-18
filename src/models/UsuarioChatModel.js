@@ -2,11 +2,11 @@ const supabase = require('../config/supabase');
 
 class UsuarioChatModel {
     
-  static async adicionarUsuarioNoChat(usuarioId, chatId) {
+  static async adicionarUsuarioNoChat(idusuario, idchat) {
     try {
       const { data, error } = await supabase
         .from('usuariochat')
-        .upsert([{ idusuario: usuarioId, idchat: chatId }]);
+        .upsert([{ idusuario: idusuario, idchat: idchat }]);
 
       return { data, error };
     } catch (error) {
@@ -14,13 +14,13 @@ class UsuarioChatModel {
     }
   }
 
-  static async removerUsuarioDoChat(usuarioId, chatId) {
+  static async removerUsuarioDoChat(idusuario, idchat) {
     try {
       const { data, error } = await supabase
         .from('usuariochat')
         .delete()
-        .eq('idusuario', usuarioId)
-        .eq('idchat', chatId);
+        .eq('idusuario', idusuario)
+        .eq('idchat', idchat);
 
       return { data, error };
     } catch (error) {
@@ -28,12 +28,12 @@ class UsuarioChatModel {
     }
   }
 
-  static async listarChatsDoUsuario(usuarioId) {
+  static async listarChatsDoUsuario(idusuario) {
     try {
       const { data, error } = await supabase
         .from('usuariochat')
         .select('idchat')
-        .eq('idusuario', usuarioId);
+        .eq('idusuario', idusuario);
 
       return { data, error };
     } catch (error) {
@@ -46,6 +46,21 @@ class UsuarioChatModel {
       const { data, error } = await supabase
         .from('usuariochat')
         .select('*')
+
+      return { data, error };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+  
+
+  static async verficarUsuarioChat(idusuario, idchat) {
+    try {
+      const { data, error } = await supabase
+        .from('usuariochat')
+        .select('*')
+        .eq('idusuario', idusuario)
+        .eq('idchat', idchat);
 
       return { data, error };
     } catch (error) {

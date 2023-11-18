@@ -2,14 +2,14 @@ const supabase = require('../config/supabase');
 
 class MensagemModel {
 
-    static async criarMensagem(chat, autor, texto) {
+    static async criarMensagem(autor, chat, texto) {
         try {
             const { data, error } = await supabase
                 .from('mensagem')
                 .upsert([
                     {
-                        chat,
                         autor,
+                        chat,
                         texto,
                     }
                 ], { returning: 'representation' });
@@ -67,18 +67,33 @@ class MensagemModel {
         }
     }
 
-    static async editarMensagem(id, novaMensagem) {
+    static async verificarAutor(autor, mensagemId){
         try {
             return await supabase
-                .from('mensagem')
-                .update(novaMensagem)
-                .eq('id', id);
+            .from('mensagem')
+            .select('*')
+            .eq('autor', autor)
+            .eq('id', mensagemId);
+
         } catch (error) {
             return { error: error.message };
         }
     }
 
-    static async deletarMensagem(id) {
+    static async editarMensagem(id, novoTexto) {
+        try {
+          const { data, error } = await supabase
+            .from('mensagem')
+            .update({ texto: novoTexto })
+            .eq('id', id);
+      
+          return { data, error };
+        } catch (error) {
+          return { error: error.message };
+        }
+      }      
+
+    static async excluirMensagem(id) {
         try {
             return await supabase
                 .from('mensagem')

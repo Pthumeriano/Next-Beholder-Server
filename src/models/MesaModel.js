@@ -167,7 +167,7 @@ class MesaModel {
         }
       }
 
-      static async addicionarvaga(mesa_id) {
+      static async adicionarVaga(mesa_id) {
         try {
           //chamada da função do banco
           let { data, error } = await supabase
