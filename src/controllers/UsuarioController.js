@@ -156,6 +156,58 @@ const sairDaMesa = async (req, res) => {
   }
 };
 
+const adicionarTema = async (req, res) => {
+  try {
+
+    const { temaId } = req.params;
+    const  userId  = req.usuarioAutenticado.userId;
+    
+    await UsuarioService.adicionarTema(userId, temaId);
+
+    res.json({ mensagem: 'Tema adicionado com sucesso' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+const removerTema = async (req, res) => {
+  try {
+
+    const { temaId } = req.params;
+    const  userId  = req.usuarioAutenticado.userId;
+    
+    await UsuarioService.removerTema(userId, temaId);
+
+    res.json({ mensagem: 'Tema removido com sucesso' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+const listarTemas = async (req, res) => {
+  try {
+    
+    await UsuarioService.listarTemas();
+
+    res.json({ mensagem: 'Temas listados com sucesso' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+const listarTemasUsuario = async (req, res) => {
+  try {
+    
+    const  userId  = req.usuarioAutenticado.userId;
+    
+    await UsuarioService.listarTemasUsuario(userId);
+
+    res.json({ mensagem: 'Temas do usuario listados com sucesso' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   listarUsuarios,
   buscarUsuario,
@@ -166,5 +218,9 @@ module.exports = {
   atualizarUsuario,
   atualizarEmail,
   entrarNaMesa,
-  sairDaMesa
+  sairDaMesa,
+  adicionarTema,
+  removerTema,
+  listarTemas,
+  listarTemasUsuario
 };
