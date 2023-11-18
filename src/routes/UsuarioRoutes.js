@@ -16,5 +16,9 @@ router.delete('/usuarios/excluir', AuthMiddleware, UsuarioController.excluirUsua
 router.post('/usuarios/login', UsuarioController.login);
 router.post('/usuarios/entrar-na-mesa/:mesaId', AuthMiddleware, UsuarioController.entrarNaMesa);
 router.post('/usuarios/sair-da-mesa/:mesaId', AuthMiddleware, UsuarioController.sairDaMesa);
+router.get('/usuarios/temas', UsuarioController.listarTemas);
+router.get('/usuarios/temas/favoritos', AuthMiddleware, UsuarioController.listarTemasUsuario);
+router.post('/usuarios/temas/adicionar/:idtema', AuthMiddleware, UsuarioController.adicionarTema);
+router.delete('/usuarios/temas/remover/:idtema', AuthMiddleware, UsuarioController.removerTema);
 
 module.exports = router;

@@ -1,13 +1,16 @@
+const supabase = require('../config/supabase');
+
 class TemaModel{
 
     static async listarTemas(){
         try {
     
-            const { error } = await supabase
+            const temas = await supabase
             .from('tema')
-            .select();
+            .select('*');
 
-            return { data, error };
+            return temas;
+
           } catch (error) {
             return { error };
           }

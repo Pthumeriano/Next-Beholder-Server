@@ -263,8 +263,7 @@ class UsuarioService {
 
   static async adicionarTema(usuarioId, temaId){
     try {
-      await UsuarioTemaModel.adicionarTema(usuarioId, temaId);
-      return { mensagem: 'Tema adicionado com sucesso' };
+      return await UsuarioTemaModel.adicionarTema(usuarioId, temaId);
     } catch (error) {
       return { error: 'Erro ao adicionar tema' };
     }
@@ -272,8 +271,7 @@ class UsuarioService {
 
   static async removerTema(usuarioId, temaId){
       try {
-        await UsuarioTemaModel.adicionarTema(usuarioId, temaId);
-        return { mensagem: 'Tema removido com sucesso' };
+        return await UsuarioTemaModel.removerTema(usuarioId, temaId);
     } catch (error) {
       return { error: 'Erro ao remover tema' };
     }
@@ -281,8 +279,9 @@ class UsuarioService {
 
   static async listarTemasUsuario(usuarioId){
     try {
-      await UsuarioTemaModel.listarTemasUsuario(usuarioId, temaId);
-        return { mensagem: 'Meus temas: ' };
+
+      return await UsuarioTemaModel.listarTemasUsuario(usuarioId);
+
     } catch (error) {
       return { error: 'Erro ao listar temas do usuário' };
     }
@@ -290,8 +289,8 @@ class UsuarioService {
 
   static async listarTemas(){
     try {
-      await TemaModel.listarTemas();
-      return { mensagem: 'Temas: ' };
+      const temas = await TemaModel.listarTemas();
+      return  temas.data ;
       
     } catch (error) {
       return { error: 'Erro ao listar temas' };

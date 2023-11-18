@@ -1,3 +1,5 @@
+const supabase = require('../config/supabase');
+
 class UsuarioTemaModel{
 
     static async adicionarTema(usuarioId, temaId) {
@@ -18,31 +20,31 @@ class UsuarioTemaModel{
     
       static async removerTema(usuarioId, temaId) {
         try {
-    
-          const { error } = await supabase
+
+          return await supabase
           .from('usuariotema')
           .delete()
           .eq('idusuario', usuarioId)
           .eq('idtema', temaId);
-                  
-          return { data, error };
+
         } catch (error) {
           return { error };
         }
       }
 
-      static async listarTemas(usuarioId){
+      static async listarTemasUsuario(usuarioId) {
         try {
-    
-            const { error } = await supabase
-            .from('usuariotema')
-            .select()
-            .eq('idusuario', usuarioId);
-                    
-            return { data, error };
-          } catch (error) {
-            return { error };
-          }
+
+          
+          let { data: usuariotema, error } = await supabase
+          .from('usuariotema')
+          .select('*')
+          .eq('idusuario', usuarioId);
+        
+          return usuariotema;
+        } catch (error) {
+          return { error: error.message };
+        }
       }
 
 }

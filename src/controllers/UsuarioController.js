@@ -161,12 +161,18 @@ const sairDaMesa = async (req, res) => {
 const adicionarTema = async (req, res) => {
   try {
 
-    const { temaId } = req.params;
+    const  temaId  = req.params.idtema;
     const  userId  = req.usuarioAutenticado.userId;
     
-    await UsuarioService.adicionarTema(userId, temaId);
+    const result =  await UsuarioService.adicionarTema(userId, temaId);
 
-    res.json({ mensagem: 'Tema adicionado com sucesso' });
+    if(result.error){
+      console.log(result)
+      res.json('Erro ao adicionar tema')
+    }else{
+      res.json('Tema adicionado com sucesso')
+    }
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -175,8 +181,10 @@ const adicionarTema = async (req, res) => {
 const removerTema = async (req, res) => {
   try {
 
-    const { temaId } = req.params;
+    const  temaId  = req.params.idtema;
     const  userId  = req.usuarioAutenticado.userId;
+
+    console.log(temaId)
     
     await UsuarioService.removerTema(userId, temaId);
 
@@ -189,9 +197,9 @@ const removerTema = async (req, res) => {
 const listarTemas = async (req, res) => {
   try {
     
-    await UsuarioService.listarTemas();
+    const temas = await UsuarioService.listarTemas();
 
-    res.json({ mensagem: 'Temas listados com sucesso' });
+    res.json( temas );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -201,10 +209,10 @@ const listarTemasUsuario = async (req, res) => {
   try {
 
     const  userId  = req.usuarioAutenticado.userId;
-    
-    await UsuarioService.listarTemasUsuario(userId);
 
-    res.json({ mensagem: 'Temas do usuario listados com sucesso' });
+    const temas = await UsuarioService.listarTemasUsuario(userId);
+
+    res.json(temas);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
