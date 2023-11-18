@@ -4,8 +4,9 @@ const bcrypt = require('bcrypt');
 const UsuarioMesaModel = require('../models/UsuarioMesaModel');
 const UsuarioChatModel = require('../models/UsuarioChatModel');
 const MesaModel = require('../models/MesaModel');
-
 const UsuarioModel = require('../models/UsuarioModel');
+const TemaModel = require('../models/TemaModel');
+const UsuarioTemaModel = require('../models/UsuarioTemaModel'); 
 
 class UsuarioService {
   static async listarUsuarios() {
