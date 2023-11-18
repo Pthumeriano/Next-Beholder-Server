@@ -1,5 +1,5 @@
 const supabase = require('../config/supabase');
-  const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 class UsuarioModel {
   static async listarUsuarios() {

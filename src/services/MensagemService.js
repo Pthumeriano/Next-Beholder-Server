@@ -1,9 +1,5 @@
 const MensagemModel = require('../models/MensagemModel');
-const UsuarioModel = require('../models/UsuarioModel');
-const UsuarioMesaModel = require('../models/UsuarioMesaModel');
 const UsuarioChatModel = require('../models/UsuarioChatModel');
-const MesaModel = require('../models/MesaModel');
-
 
 class MensagemService {
 
