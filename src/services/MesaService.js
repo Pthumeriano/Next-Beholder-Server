@@ -52,7 +52,8 @@ class MesaService {
   static async excluirMesa(mestre, id){
     try {
 
-      const usuarioValido = await UsuarioService.buscarMesaMestre(mestre, id);
+
+      const usuarioValido = await this.buscarMesaMestre(mestre, id);
 
       if (!usuarioValido.data || usuarioValido.data.length === 0) {
         return { error: 'Sessão inválida, efetue login novamente' };
