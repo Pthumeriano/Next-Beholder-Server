@@ -254,20 +254,41 @@ class UsuarioService {
     }
   }
 
-  static async adicionarTema(){
-
+  static async adicionarTema(usuarioId, temaId){
+    try {
+      await UsuarioTemaModel.adicionarTema(usuarioId, temaId);
+      return { mensagem: 'Tema adicionado com sucesso' };
+    } catch (error) {
+      return { error: 'Erro ao adicionar tema' };
+    }
   }
 
-  static async removerTema(){
-    
+  static async removerTema(usuarioId, temaId){
+      try {
+        await UsuarioTemaModel.adicionarTema(usuarioId, temaId);
+        return { mensagem: 'Tema removido com sucesso' };
+    } catch (error) {
+      return { error: 'Erro ao remover tema' };
+    }
   }
 
-  static async listarTemasUsuario(){
-    
+  static async listarTemasUsuario(usuarioId){
+    try {
+      await UsuarioTemaModel.listarTemasUsuario(usuarioId, temaId);
+        return { mensagem: 'Meus temas: ' };
+    } catch (error) {
+      return { error: 'Erro ao listar temas do usuário' };
+    }
   }
 
   static async listarTemas(){
-
+    try {
+      await TemaModel.listarTemas();
+      return { mensagem: 'Temas: ' };
+      
+    } catch (error) {
+      return { error: 'Erro ao listar temas' };
+    }
   }
 
 }
