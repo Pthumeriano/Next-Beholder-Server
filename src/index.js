@@ -10,7 +10,8 @@ const ChatRoutes = require('./routes/ChatRoutes');
 const UsuarioChatRoutes = require('./routes/UsuarioChatRoutes');
 const UsuarioMesaRoutes = require('./routes/UsuarioMesaRoutes');
 const MensagemRoutes = require('./routes/MensagemRoutes');
-const PostRoutes = require('./routes/PostRoutes')
+const PostRoutes = require('./routes/PostRoutes');
+const AvaliacaoRoutes = require('./routes/AvaliacaoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 4200;
@@ -24,6 +25,7 @@ app.use('/api/usuariochat', UsuarioChatRoutes);
 app.use('/api/usuariomesa', UsuarioMesaRoutes);
 app.use('/api/mensagens', MensagemRoutes);
 app.use('/api/posts', PostRoutes);
+app.use('/api/avaliacoes', AvaliacaoRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
