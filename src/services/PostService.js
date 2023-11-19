@@ -1,4 +1,5 @@
 const PostModel = require('../models/PostModel');
+const UsuarioModel = require('../models/UsuarioModel');
 
 class PostService {
   static async criarPost(dados) {
@@ -19,8 +20,14 @@ class PostService {
     }
   }
 
-  static async excluirPost(idPost){
+  static async excluirPost(usuarioAutenticado, idPost){
     try {
+
+      const usuario = await PostModel.verificarAutorPost(idPost, usuarioAutenticado); 
+
+      if (!usuario.data || usuario.data.length === 0) {
+        return { error: 'Você não tem permissão para excluir este post' };
+      }
 
         return await PostModel.excluirPost(idPost);
     } catch (error) {
@@ -28,9 +35,15 @@ class PostService {
     }
   }
 
-  static async editarPost(idPost, novosDados){
+  static async editarPost(usuarioAutenticado, idPost, novosDados){
     try {
-        
+       
+      const usuario = await PostModel.verificarAutorPost(idPost, usuarioAutenticado);
+
+      if (!usuario.data || usuario.data.length === 0) {
+        return { error: 'Você não tem permissão para alterar este post' };
+      }
+
         return await PostModel.editarPost(idPost, novosDados);
     } catch (error) {
         return { error: 'Erro ao editar post' };

@@ -38,7 +38,7 @@ const editarPost = async (req, res) => {
 
 
         const { id: postId } = req.params;
-        const result = await PostService.editarPost(postId, req.body);
+        const result = await PostService.editarPost(req.usuarioAutenticado.userId, postId, req.body);
     
         if (result.error) {
           res.status(400).json({ error: result.error });
@@ -53,7 +53,7 @@ const editarPost = async (req, res) => {
 const excluirPost = async (req, res) => {
     try {
 
-        const result = await PostService.excluirPost(req.params.id);
+        const result = await PostService.excluirPost(req.usuarioAutenticado.userId, req.params.id);
     
         if (result.error) {
           res.status(400).json({ error: result.error });

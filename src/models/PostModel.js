@@ -39,7 +39,6 @@ class PostModel {
 
   static async editarPost(idPost, novosDados){
     try {
-
         const { data, error } = await supabase
           .from('post')
           .update(novosDados)
@@ -57,6 +56,20 @@ class PostModel {
           .from('post')
           .select('*')
           .eq('id',idPost);
+  
+        return { data, error };
+      } catch (error) {
+        return { error: error.message };
+      }
+  }
+
+  static async verificarAutorPost(idPost, idAutor){
+    try {
+        const { data, error } = await supabase
+          .from('post')
+          .select('*')
+          .eq('id',idPost)
+          .eq('idautor', idAutor);
   
         return { data, error };
       } catch (error) {
