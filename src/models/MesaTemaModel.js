@@ -1,25 +1,29 @@
+const supabase = require('../config/supabase')
+
 class mesatemaModel{
 
-    static async adicionarTema(mesaId, temaId) {
-        try {
-    
-          const { data, error } = await supabase
-            .from('mesatema')
-            .insert([
-            { 'idmesa': mesaId, 'idtema': temaId },
-            ])
-            .select()
-            
-          return { data, error };
-        } catch (error) {
-          return { error };
-        }
-      }
+  static async adicionarTema(mesaId, temaId) {
+    try {
+      const { data, error } = await supabase
+        .from('mesatema')
+        .upsert(
+          [{ 'idmesa': mesaId, 'idtema': temaId }],
+          { onConflict: ['idmesa', 'idtema'] }
+        );
+  
+      return { data, error };
+
+    } catch (error) {
+      return { error };
+    }
+  }
+  
+  
     
       static async removerTema(mesaId, temaId) {
         try {
     
-          const { error } = await supabase
+          const {data, error} = await supabase
           .from('mesatema')
           .delete()
           .eq('idmesa', mesaId)
@@ -31,15 +35,30 @@ class mesatemaModel{
         }
       }
 
-      static async listarTemas(mesaId){
+      static async listarTemasMesa(mesaId){
         try {
     
-            const { error } = await supabase
+            const data = await supabase
             .from('mesatema')
-            .select()
+            .select('idtema')
             .eq('idmesa', mesaId);
                     
-            return { data, error };
+            return data;
+          } catch (error) {
+            return { error };
+          }
+      }
+
+      static async buscarTemaMesa(mesaId, temaId){
+        try {
+    
+            const data = await supabase
+            .from('mesatema')
+            .select('*')
+            .eq('idmesa', mesaId)
+            .eq('idtema', temaId);
+                    
+            return data;
           } catch (error) {
             return { error };
           }
