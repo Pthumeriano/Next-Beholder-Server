@@ -7,7 +7,7 @@ const AuthMiddleware = require('../middlewares/AutenticacaoMiddleware');
 const Validacao = require('../middlewares/ValidacaoMiddleware')
 
 router.get('/usuarios', UsuarioController.listarUsuarios);
-router.get('/usuario', UsuarioController.buscarUsuario);
+router.get('/usuario/:id', UsuarioController.buscarUsuario);
 router.post('/usuarios', Validacao.validarNovoUsuario, UsuarioController.criarNovoUsuario);
 router.post('/usuarios/atualizar-senha', AuthMiddleware, Validacao.validarAtualizacaoSenha, UsuarioController.atualizarSenha);
 router.post('/usuarios/atualizar-email', AuthMiddleware, Validacao.validarEmail, UsuarioController.atualizarEmail);

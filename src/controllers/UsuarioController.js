@@ -14,7 +14,9 @@ const listarUsuarios = async (req, res) => {
 
 const buscarUsuario = async (req, res) => {
   try {
-    const { data, error } = await UsuarioService.buscarUsuario(req.body.id);
+    const { id: userId } = req.params;
+    console.log(userId);
+    const { data, error } = await UsuarioService.buscarUsuario(userId);
     if (error) {
       throw new Error(`Erro ao buscar usuário por ID: ${error.message}`);
     }
