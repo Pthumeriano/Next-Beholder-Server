@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ const PORT = process.env.PORT || 4200;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 app.use('/api', UsuarioRoutes);
 app.use('/api', MesaRoutes);
 app.use('/api', ChatRoutes);
