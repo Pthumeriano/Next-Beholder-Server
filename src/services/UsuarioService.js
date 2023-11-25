@@ -125,7 +125,7 @@ class UsuarioService {
 
       // Adiciona o token ao cookie
       const cookieOptions = {
-        httpOnly: true,
+        httpOnly: false,
         expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Cookie válido por 30 dias
       };
       const cookieName = 'BeholderToken'; // Nome do cookie conforme padrões de nomeação
