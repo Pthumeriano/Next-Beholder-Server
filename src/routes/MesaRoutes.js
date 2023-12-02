@@ -8,7 +8,8 @@ const Validacao = require('../middlewares/ValidacaoMiddleware')
 
 router.get('/mesas', MesaController.listarMesas);
 router.post('/mesas', AuthMiddleware, Validacao.validarCriacaoMesa, MesaController.criarMesa);
-router.get('/mesa', MesaController.buscarMesa);
+router.get('/mesa/:id', MesaController.buscarMesa);
+router.get('/buscar-mesa/:titulo', MesaController.buscarMesaTitulo);
 router.delete('/mesa', AuthMiddleware, MesaController.excluirMesa)
 router.patch('/mesa/:id', AuthMiddleware, MesaController.alterarMesa);
 

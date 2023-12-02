@@ -12,6 +12,10 @@ class MesaService {
     return await MesaModel.buscarMesa(id);
   }
 
+  static async buscarMesaTtulo(titulo) {
+    return await MesaModel.buscarMesaTtulo(titulo);
+  }
+
   static async buscarMesaMestre(mestre, id){
     try {
 

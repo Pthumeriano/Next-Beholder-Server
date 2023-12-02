@@ -26,6 +26,15 @@ class MesaModel {
         }
       }
 
+      static async buscarMesaTitulo(titulo) {
+        try {
+          const { data, error } = await supabase.from('mesa').select('*').eq('titulo',titulo);
+          return { data, error };
+        } catch (error) {
+          return { error: error.message };
+        }
+      }
+
       static async buscarMesaMestre(mestreId, mesaId) {
         try {
           return await supabase
