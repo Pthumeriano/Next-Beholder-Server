@@ -1,7 +1,14 @@
 const { body, validationResult } = require('express-validator');
 
 const validarNovoUsuario = [
-  body('nome').notEmpty().withMessage('O nome é obrigatório'),
+  body('nome')
+    .notEmpty().withMessage('O nome é obrigatório')
+    .custom((value) => {
+      if (/\d/.test(value)) {
+        throw new Error('O nome não pode conter números');
+      }
+      return true;
+    }),
   body('email').isEmail().withMessage('O email deve ser válido'),
   body('senha').isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres'),
 
@@ -13,6 +20,7 @@ const validarNovoUsuario = [
     next();
   },
 ];
+
 
 const validarAlteracaoUsuario = [
   body('nome')
