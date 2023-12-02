@@ -49,11 +49,11 @@ const buscarMesaTitulo = async (req, res) => {
 
 const criarMesa = async (req, res) => {
     try {
-      const { titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas } = req.body;
+      const { titulo, subtitulo, sistema, descricao, dia, horario, periodo, preco, vagas } = req.body;
   
       const mestre = req.usuarioAutenticado.userId;
   
-      const result = await MesaService.criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas);
+      const result = await MesaService.criarMesa(mestre, titulo, subtitulo, sistema, descricao, dia, horario, periodo, preco, vagas);
   
       if (result.error) {
         throw new Error(`Erro ao criar mesa: ${result.error}`);

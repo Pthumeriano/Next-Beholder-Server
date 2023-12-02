@@ -71,7 +71,7 @@ class MesaModel {
       
       
 
-      static async criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas, chat) {
+      static async criarMesa(mestre, titulo, subtitulo, sistema, descricao, dia, horario, periodo, preco, vagas, chat) {
         try {
           return await supabase
             .from('mesa')
@@ -82,7 +82,7 @@ class MesaModel {
                 subtitulo,
                 sistema,
                 descricao,
-                data,
+                dia,
                 horario,
                 periodo,
                 preco,

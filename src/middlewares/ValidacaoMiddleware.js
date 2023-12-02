@@ -110,8 +110,8 @@ const validarAtualizacaoSenha = [
       .notEmpty().withMessage('A descrição é obrigatória')
       .isLength({ max: 100 }).withMessage('A descrição não pode ter mais de 100 caracteres'),
   
-    body('data')
-      .notEmpty().withMessage('A data é obrigatória'),
+    body('dia')
+      .notEmpty().withMessage('O dia é obrigatório'),
   
     body('horario')
       .notEmpty().withMessage('O horário é obrigatório')

@@ -32,7 +32,7 @@ class MesaService {
     }
   }
 
-  static async criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas) {
+  static async criarMesa(mestre, titulo, subtitulo, sistema, descricao, dia, horario, periodo, preco, vagas) {
     try {
 
       const chatResult = await ChatModel.criarChat(mestre);
@@ -43,7 +43,7 @@ class MesaService {
 
       const chatId = chatResult.data[0].id
 
-      const result = await MesaModel.criarMesa(mestre, titulo, subtitulo, sistema, descricao, data, horario, periodo, preco, vagas, chatId);
+      const result = await MesaModel.criarMesa(mestre, titulo, subtitulo, sistema, descricao, dia, horario, periodo, preco, vagas, chatId);
 
       await UsuarioService.entrarNaMesa(mestre, result.data[0].id);
 
