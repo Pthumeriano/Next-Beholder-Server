@@ -26,7 +26,7 @@ const buscarMesa = async (req, res) => {
     }
     res.json(data);
   } catch (error) {
-    res.stats(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -41,7 +41,7 @@ const buscarMesaTitulo = async (req, res) => {
     }
     res.json(data);
   } catch (error) {
-    res.stats(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 

@@ -1,4 +1,4 @@
-const UsuarioService = require('../services/UsuarioService');
+const UsuarioService = require("../services/UsuarioService");
 
 const listarUsuarios = async (req, res) => {
   try {
@@ -22,7 +22,7 @@ const buscarUsuario = async (req, res) => {
     }
 
     if (!data) {
-      res.status(404).json({ mensagem: 'Usuário não encontrado' });
+      res.status(404).json({ mensagem: "Usuário não encontrado" });
     } else {
       res.json(data);
     }
@@ -34,14 +34,17 @@ const buscarUsuario = async (req, res) => {
 const criarNovoUsuario = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log(req.body)
-    const { data, error } = await UsuarioService.criarNovoUsuario(email, req.body);
+    console.log(req.body);
+    const { data, error } = await UsuarioService.criarNovoUsuario(
+      email,
+      req.body
+    );
 
     if (error) {
       throw new Error(`Erro ao criar novo usuário: ${error}`);
     }
 
-    res.json({ mensagem: 'Novo usuário criado com sucesso!', usuario: data });
+    res.json({ mensagem: "Novo usuário criado com sucesso!", usuario: data });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -52,13 +55,20 @@ const atualizarSenha = async (req, res) => {
     const { senhaAntiga, novaSenha } = req.body;
 
     // Chama o serviço para atualizar a senha
-    const result = await UsuarioService.atualizarSenha(senhaAntiga, novaSenha, req.usuarioAutenticado.userId);
+    const result = await UsuarioService.atualizarSenha(
+      senhaAntiga,
+      novaSenha,
+      req.usuarioAutenticado.userId
+    );
 
     if (result.error) {
       throw new Error(`Erro ao atualizar a senha: ${result.error}`);
     }
 
-    res.json({ mensagem: 'Senha atualizada com sucesso!', usuario: result.data });
+    res.json({
+      mensagem: "Senha atualizada com sucesso!",
+      usuario: result.data,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -68,13 +78,19 @@ const atualizarUsuario = async (req, res) => {
   try {
     const novosDados = req.body;
 
-    const result = await UsuarioService.atualizarUsuario(req.usuarioAutenticado.userId, novosDados);
+    const result = await UsuarioService.atualizarUsuario(
+      req.usuarioAutenticado.userId,
+      novosDados
+    );
 
     if (result.error) {
       throw new Error(`Erro ao alterar usuário: ${result.error}`);
     }
 
-    res.json({ mensagem: 'Usuário alterado com sucesso!', usuario: result.data });
+    res.json({
+      mensagem: "Usuário alterado com sucesso!",
+      usuario: result.data,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -82,33 +98,42 @@ const atualizarUsuario = async (req, res) => {
 
 const atualizarEmail = async (req, res) => {
   try {
-    
     const { senha, email } = req.body;
 
-    const result = await UsuarioService.atualizarEmail(req.usuarioAutenticado.userId, req.usuarioAutenticado.email, senha, email);
+    const result = await UsuarioService.atualizarEmail(
+      req.usuarioAutenticado.userId,
+      req.usuarioAutenticado.email,
+      senha,
+      email
+    );
 
     if (result.error) {
       throw new Error(`Erro ao alterar e-mail: ${result.error}`);
     }
 
-    res.json({ mensagem: 'E-mail alterado com sucesso!', usuario: result.data });
+    res.json({
+      mensagem: "E-mail alterado com sucesso!",
+      usuario: result.data,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-
 const excluirUsuario = async (req, res) => {
   try {
     const { senha } = req.body;
-    
-    const result = await UsuarioService.excluirUsuario(req.usuarioAutenticado.userId, senha);
+
+    const result = await UsuarioService.excluirUsuario(
+      req.usuarioAutenticado.userId,
+      senha
+    );
 
     if (result.error) {
       throw new Error(`Erro ao excluir usuário: ${result.error}`);
     }
 
-    res.json({ mensagem: 'Usuário excluído com sucesso!' });
+    res.json({ mensagem: "Usuário excluído com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -129,15 +154,18 @@ const login = async (req, res) => {
 const entrarNaMesa = async (req, res) => {
   try {
     const { mesaId } = req.params;
-    const  userId  = req.usuarioAutenticado.userId;
+    const userId = req.usuarioAutenticado.userId;
 
-    const resultadoEntradaMesa = await UsuarioService.entrarNaMesa(userId, mesaId);
+    const resultadoEntradaMesa = await UsuarioService.entrarNaMesa(
+      userId,
+      mesaId
+    );
 
     if (resultadoEntradaMesa.error) {
       throw new Error(`Erro ao entrar na mesa: ${resultadoEntradaMesa.error}`);
     }
 
-    res.json({ mensagem: 'Entrada na mesa realizada com sucesso' });
+    res.json({ mensagem: "Entrada na mesa realizada com sucesso" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -146,15 +174,18 @@ const entrarNaMesa = async (req, res) => {
 const sairDaMesa = async (req, res) => {
   try {
     const { mesaId } = req.params;
-    const  userId  = req.usuarioAutenticado.userId;
+    const userId = req.usuarioAutenticado.userId;
 
-    const resultadoEntradaMesa = await UsuarioService.sairDaMesa(userId, mesaId);
+    const resultadoEntradaMesa = await UsuarioService.sairDaMesa(
+      userId,
+      mesaId
+    );
 
     if (resultadoEntradaMesa.error) {
       throw new Error(`Erro ao sair na mesa: ${resultadoEntradaMesa.error}`);
     }
 
-    res.json({ mensagem: 'Saída da mesa realizada com sucesso' });
+    res.json({ mensagem: "Saída da mesa realizada com sucesso" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -170,13 +201,12 @@ const adicionarTema = async (req, res) => {
     if (result.error) {
       res.status(400).json({ error: result.error });
     } else {
-      res.json({ mensagem: 'Tema adicionado com sucesso' });
+      res.json({ mensagem: "Tema adicionado com sucesso" });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 const removerTema = async (req, res) => {
   try {
@@ -188,28 +218,26 @@ const removerTema = async (req, res) => {
     if (result.error) {
       res.status(400).json({ error: result.error });
     } else {
-      res.json({ mensagem: 'Tema removido com sucesso' });
+      res.json({ mensagem: "Tema removido com sucesso" });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 const listarTemas = async (req, res) => {
   try {
-    
     const temas = await UsuarioService.listarTemas();
 
-    res.json( temas );
+    res.json(temas);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 const listarTemasUsuario = async (req, res) => {
   try {
-
-    const  userId  = req.usuarioAutenticado.userId;
+    const userId = req.usuarioAutenticado.userId;
 
     const temas = await UsuarioService.listarTemasUsuario(userId);
 
@@ -217,7 +245,26 @@ const listarTemasUsuario = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
+
+const listarTemasDoUsuario = async (req, res) => {
+  try {
+    const temas = await UsuarioService.listarTemasUsuario(req.params.idusuario);
+
+    res.json(temas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const listarTemasTodosUsuarios = async (req, res) => {
+  try {
+    const temas = await UsuarioService.listarTemasTodosUsuarios();
+    res.json(temas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   listarUsuarios,
@@ -233,5 +280,7 @@ module.exports = {
   adicionarTema,
   removerTema,
   listarTemas,
-  listarTemasUsuario
+  listarTemasUsuario,
+  listarTemasDoUsuario,
+  listarTemasTodosUsuarios,
 };
