@@ -38,7 +38,7 @@ class UsuarioMesaService {
   }
 
   static async listarUsuarioMesa() {
-    return await UsuarioMesaModel.listarUsuarioMesa();
+    return (await UsuarioMesaModel.listarUsuarioMesa()).data;
   }
 
   static async listarUsuariosDaMesa(mesaId) {

@@ -55,11 +55,9 @@ class UsuarioMesaModel {
 
   static async listarUsuarioMesa() {
     try {
-      let { data: usuariomesa, error } = await supabase
-        .from("usuariomesa")
-        .select("*");
+      let { data, error } = await supabase.from("usuariomesa").select("*");
 
-      return { usuariomesa, error };
+      return { data, error };
     } catch (error) {
       return { error: error.message };
     }
