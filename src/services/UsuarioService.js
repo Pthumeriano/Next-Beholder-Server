@@ -214,8 +214,6 @@ class UsuarioService {
         return { error: "Erro ao associar usuário ao chat da mesa" };
       }
 
-      console.log("Usuário entrou na mesa com sucesso");
-
       return { mensagem: "Usuário entrou na mesa com sucesso" };
     } catch (error) {
       console.error("Erro ao entrar na mesa:", error.message);
@@ -296,8 +294,6 @@ class UsuarioService {
         }
       }
 
-      console.log("Usuário saiu da mesa com sucesso");
-
       return { mensagem: "Usuário saiu da mesa com sucesso" };
     } catch (error) {
       console.error("Erro ao sair da mesa:", error.message);
@@ -375,7 +371,6 @@ class UsuarioService {
       const temas = await TemaModel.listarTemas();
       const mapUsuarioTema = {};
 
-      console.log(usuarioTema);
       for (let temaDoUsuario of usuarioTema) {
         const tema = temas.data.find(
           (tema) => tema.id === temaDoUsuario.idtema
@@ -388,7 +383,6 @@ class UsuarioService {
 
       return mapUsuarioTema;
     } catch (error) {
-      console.log(error);
       return { error: "Erro ao listar todos os temas dos usuários" };
     }
   }

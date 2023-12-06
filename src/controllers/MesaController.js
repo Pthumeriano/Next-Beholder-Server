@@ -62,7 +62,6 @@ const buscarMesaTitulo = async (req, res) => {
 
 const criarMesa = async (req, res) => {
   try {
-    console.log("Controller da mesa: " + req.usuarioAutenticado.userId);
     const {
       titulo,
       subtitulo,
