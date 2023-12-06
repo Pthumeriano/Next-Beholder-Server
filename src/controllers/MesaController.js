@@ -17,6 +17,21 @@ const listarMesas = async (req, res) => {
   }
 };
 
+const listarMesasDoMestre = async (req, res) => {
+  try {
+    const { data, error } = await MesaService.listarMesasDoMestre(
+      req.usuarioAutenticado.userId
+    );
+
+    if (error) {
+      throw new Error(`Erro ao listar mesas do mestre: ${error.message}`);
+    }
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const buscarMesa = async (req, res) => {
   try {
     const { data, error } = await MesaService.buscarMesa(req.params.id);
@@ -154,4 +169,5 @@ module.exports = {
   excluirMesa,
   alterarMesa,
   buscarMesaTitulo,
+  listarMesasDoMestre,
 };
