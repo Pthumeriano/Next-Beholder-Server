@@ -27,12 +27,12 @@ class UsuarioMesaModel {
     }
   }
 
-  static async listarMesasDoUsuario(usuarioId) {
+  static async listarUsuariosDaMesa(mesaId) {
     try {
       const { data, error } = await supabase
         .from("usuariomesa")
-        .select("idmesa")
-        .eq("idusuario", usuarioId);
+        .select("usuario(nome, email, id)")
+        .eq("idmesa", mesaId);
 
       return { data, error };
     } catch (error) {
@@ -40,12 +40,12 @@ class UsuarioMesaModel {
     }
   }
 
-  static async listarUsuariosDaMesa(mesaId) {
+  static async listarMesasDoUsuario(usuarioId) {
     try {
       const { data, error } = await supabase
         .from("usuariomesa")
-        .select("idusuario")
-        .eq("idmesa", mesaId);
+        .select("mesa(*)")
+        .eq("idusuario", usuarioId);
 
       return { data, error };
     } catch (error) {

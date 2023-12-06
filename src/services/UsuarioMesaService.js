@@ -44,6 +44,10 @@ class UsuarioMesaService {
   static async listarUsuariosDaMesa(mesaId) {
     return (await UsuarioMesaModel.listarUsuariosDaMesa(mesaId)).data;
   }
+
+  static async listarMesasDoUsuario(usuarioId) {
+    return (await UsuarioMesaModel.listarMesasDoUsuario(usuarioId)).data;
+  }
 }
 
 module.exports = UsuarioMesaService;

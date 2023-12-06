@@ -11,6 +11,7 @@ router.post(
 );
 router.get("/", UsuarioMesaController.listarUsuarioMesa);
 router.get("/:id", UsuarioMesaController.listarUsuariosDaMesa);
+router.get("/mesas-do-usuario/:id", UsuarioMesaController.listarMesasDoUsuario);
 
 // Remover usuário da mesa
 router.post(
