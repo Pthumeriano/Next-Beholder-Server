@@ -62,6 +62,20 @@ class UsuarioMesaModel {
       return { error: error.message };
     }
   }
+
+  static async buscarUsuarioMesa(idusuario, idmesa) {
+    try {
+      let { data, error } = await supabase
+        .from("usuariomesa")
+        .select("*")
+        .eq("idusuario", idusuario)
+        .eq("idmesa", idmesa);
+
+      return { data, error };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
 }
 
 module.exports = UsuarioMesaModel;

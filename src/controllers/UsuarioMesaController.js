@@ -61,10 +61,19 @@ const listarMesasDoUsuario = async (req, res) => {
   res.json(result);
 };
 
+const buscarUsuarioMesa = async (req, res) => {
+  const result = await UsuarioMesaService.buscarUsuarioMesa(
+    req.usuarioAutenticado.userId,
+    req.params.id
+  );
+  res.json(result);
+};
+
 module.exports = {
   adicionarUsuarioNaMesa,
   removerUsuarioDaMesa,
   listarUsuarioMesa,
   listarUsuariosDaMesa,
   listarMesasDoUsuario,
+  buscarUsuarioMesa,
 };
