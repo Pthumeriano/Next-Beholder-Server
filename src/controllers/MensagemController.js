@@ -15,10 +15,10 @@ const listarMensagens = async (req, res) => {
 
 const listarMensagensChat = async (req, res) => {
   try {
-    const { id: chatId } = req.params;
+    const { mesaId: mesaId } = req.params;
     const { data, error } = await MensagemService.listarMensagensChat(
       req.usuarioAutenticado.userId,
-      chatId
+      mesaId
     );
 
     if (error) {
@@ -33,20 +33,20 @@ const listarMensagensChat = async (req, res) => {
 const enviarMensagemChat = async (req, res) => {
   try {
     //composição da mensagem
-    const { id: mesaId } = req.params;
+    const { mesaId: mesaId } = req.params;
     const mensagem = req.body.mensagem;
     const userId = req.usuarioAutenticado.userId;
 
     const { data, error } = await MensagemService.enviarMensagem(
-      req.usuarioAutenticado.userId,
+      userId,
       mesaId,
-      req.body.mensagem
+      mensagem
     );
 
     if (error) {
       throw new Error(`Erro ao enviar mensagem: ${error}`);
     }
-    res.json({ mensagem: "Mensagem enviado com sucesso!" });
+    res.json({ mensagem: "Mensagem enviada com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

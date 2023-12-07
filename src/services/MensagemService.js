@@ -8,18 +8,25 @@ class MensagemService {
     return await MensagemModel.listarMensagens();
   }
 
-  static async listarMensagensChat(usuarioAutenticado, idchat) {
-    //se o usuário está na mesa
-    const chat = await UsuarioChatModel.verficarUsuarioChat(
-      usuarioAutenticado,
-      idchat
-    );
+  static async listarMensagensChat(usuarioAutenticado, mesaId) {
+    //se a mesa existe
+    const mesa = await MesaModel.buscarMesa(mesaId);
 
-    if (!chat.data || chat.data.length === 0) {
-      return { error: "Você não tem permissão para ler esta mensagem" };
+    if (!mesa.data || mesa.data.length === 0) {
+      return { error: "Mesa não encontrada" };
     }
 
-    return await MensagemModel.listarMensagensChat(idchat);
+    //se o usuário está na mesa
+    const verificarUsuarioMesa = await UsuarioMesaModel.buscarUsuarioMesa(
+      usuarioAutenticado,
+      mesaId
+    );
+
+    if (!verificarUsuarioMesa.data || verificarUsuarioMesa.data.length === 0) {
+      return { error: "Você não tem permissão para ler estas mensagens" };
+    }
+
+    return await MensagemModel.listarMensagensChat(mesa.data[0].chat);
   }
 
   static async editarMensagem(usuarioAutenticado, id, texto) {
@@ -59,9 +66,6 @@ class MensagemService {
     if (!mesa.data || mesa.data.length === 0) {
       return { error: "Mesa não encontrada" };
     }
-
-    console.log("Mesa: ");
-    console.log(mesa);
 
     //se o usuário está na mesa
     const verificarUsuarioMesa = await UsuarioMesaModel.buscarUsuarioMesa(
