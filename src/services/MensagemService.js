@@ -1,5 +1,7 @@
 const MensagemModel = require("../models/MensagemModel");
+const MesaModel = require("../models/MesaModel");
 const UsuarioChatModel = require("../models/UsuarioChatModel");
+const UsuarioMesaModel = require("../models/UsuarioMesaModel");
 
 class MensagemService {
   static async listarMensagens() {
@@ -50,20 +52,30 @@ class MensagemService {
     return await MensagemModel.excluirMensagem(id);
   }
 
-  static async enviarMensagem(usuarioAutenticado, chatId, mensagem) {
+  static async enviarMensagem(usuarioAutenticado, mesaId, mensagem) {
+    //se a mesa existe
+    const mesa = await MesaModel.buscarMesa(mesaId);
+
+    if (!mesa.data || mesa.data.length === 0) {
+      return { error: "Mesa não encontrada" };
+    }
+
+    console.log("Mesa: ");
+    console.log(mesa);
+
     //se o usuário está na mesa
-    const chat = await UsuarioChatModel.verficarUsuarioChat(
+    const verificarUsuarioMesa = await UsuarioMesaModel.buscarUsuarioMesa(
       usuarioAutenticado,
-      chatId
+      mesaId
     );
 
-    if (!chat.data || chat.data.length === 0) {
+    if (!verificarUsuarioMesa.data || verificarUsuarioMesa.data.length === 0) {
       return { error: "Você não tem permissão para enviar esta mensagem" };
     }
 
     return await MensagemModel.criarMensagem(
       usuarioAutenticado,
-      chatId,
+      mesa.data[0].chat,
       mensagem
     );
   }

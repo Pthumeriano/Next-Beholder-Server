@@ -32,17 +32,21 @@ const listarMensagensChat = async (req, res) => {
 
 const enviarMensagemChat = async (req, res) => {
   try {
-    const { id: chatId } = req.params;
+    //composição da mensagem
+    const { id: mesaId } = req.params;
+    const mensagem = req.body.mensagem;
+    const userId = req.usuarioAutenticado.userId;
+
     const { data, error } = await MensagemService.enviarMensagem(
       req.usuarioAutenticado.userId,
-      chatId,
+      mesaId,
       req.body.mensagem
     );
 
     if (error) {
       throw new Error(`Erro ao enviar mensagem: ${error}`);
     }
-    res.json(data);
+    res.json({ mensagem: "Mensagem enviado com sucesso!" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -58,7 +62,7 @@ const editarMensagemChat = async (req, res) => {
     );
 
     if (error) {
-      throw new Error(`Erro ao editar mensagem: ${error.message}`);
+      throw new Error(`Erro ao editar mensagem: ${error}`);
     }
     res.json(data);
   } catch (error) {
