@@ -12,7 +12,11 @@ router.post(
 router.get("/", UsuarioMesaController.listarUsuarioMesa);
 router.get("/:id", UsuarioMesaController.listarUsuariosDaMesa);
 router.get("/mesas-do-usuario/:id", UsuarioMesaController.listarMesasDoUsuario);
-router.get("/buscarusuariomesa/:id", UsuarioMesaController.buscarUsuarioMesa);
+router.get(
+  "/buscarusuariomesa/:id",
+  AuthMiddleware,
+  UsuarioMesaController.buscarUsuarioMesa
+);
 // Remover usuário da mesa
 router.post(
   "/:mesaId/remover",
