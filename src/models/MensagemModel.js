@@ -2,9 +2,6 @@ const supabase = require("../config/supabase");
 
 class MensagemModel {
   static async criarMensagem(autor, chat, texto) {
-    console.log("Autor: ", autor);
-    console.log("Chat: ", chat);
-    console.log("Texto: ", texto);
     try {
       const { data, error } = await supabase.from("mensagem").upsert(
         [
