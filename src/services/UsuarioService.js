@@ -145,14 +145,13 @@ class UsuarioService {
   static async entrarNaMesa(usuarioId, mesaId) {
     try {
       // Verificar se o usuário já está na mesa
-      const usuarioJaNaMesa = await UsuarioMesaModel.listarMesasDoUsuario(
-        usuarioId
+      const verificarUsuarioMesa = await UsuarioMesaModel.buscarUsuarioMesa(
+        usuarioId,
+        mesaId
       );
-      if (
-        usuarioJaNaMesa.data &&
-        usuarioJaNaMesa.data.some((m) => m.idmesa === mesaId)
-      ) {
-        return { error: "O usuário já está na mesa" };
+
+      if (verificarUsuarioMesa.data.length > 0) {
+        return { mensagem: "Bem-vindo(a) de volta!" };
       }
 
       // Verificar se há vagas disponíveis na mesa
