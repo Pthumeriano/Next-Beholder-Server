@@ -139,7 +139,7 @@ const excluirUsuario = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, senha } = req.body;
-
+  console.log("Tentativa de login")
   const result = await UsuarioService.login(email, senha, res);
 
   if (result.error) {
