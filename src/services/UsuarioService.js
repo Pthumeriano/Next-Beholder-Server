@@ -131,7 +131,7 @@ class UsuarioService {
               httpOnly: false,
               expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Cookie válido por 30 dias
               secure: true, // Apenas enviar cookies através de conexões HTTPS
-              SameSite: false
+              SameSite: "none"
           };
           const cookieName = "BeholderToken"; // Nome do cookie conforme padrões de nomeação
   
