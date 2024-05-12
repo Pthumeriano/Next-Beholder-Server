@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:8081", "exp://10.0.0.138:8081","exp://10.0.0.145:8081"],
+    origin: ["http://localhost:3000", "http://localhost:8081", "exp://10.0.0.138:8081","exp://10.0.0.145:8081","https://beholder-fork-cs90k8ao7-pthumerianos-projects.vercel.app/"],
     credentials: true,
   })
 );
