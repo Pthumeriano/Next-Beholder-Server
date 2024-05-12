@@ -25,8 +25,14 @@ app.use(
   cors({
     origin: ["http://localhost:3000", "http://localhost:8081", "exp://10.0.0.138:8081","exp://10.0.0.145:8081","https://beholder-fork-cs90k8ao7-pthumerianos-projects.vercel.app","https://beholder-fork.vercel.app"],
     credentials: true,
-  })
+  }), 
 );
+
+//gambs?
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", true);
+  next();
+});
 
 app.use("/api", UsuarioRoutes);
 app.use("/api", MesaRoutes);
