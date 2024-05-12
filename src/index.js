@@ -28,11 +28,6 @@ app.use(
   }), 
 );
 
-//gambs?
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", true);
-  next();
-});
 
 app.use("/api", UsuarioRoutes);
 app.use("/api", MesaRoutes);
