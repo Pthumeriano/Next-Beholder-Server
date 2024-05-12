@@ -104,46 +104,47 @@ class UsuarioService {
   }
 
   static async login(email, senha, res) {
-      try {
-          const usuario = await UsuarioModel.buscarUsuarioEmail(email);
+    try {
+      const usuario = await UsuarioModel.buscarUsuarioEmail(email);
   
-          if (!usuario.data || usuario.data.length === 0) {
-              return { error: "Credenciais inválidas" };
-          }
-  
-          const senhaCorreta = await bcrypt.compare(senha, usuario.data[0].senha);
-  
-          if (!senhaCorreta) {
-              return { error: "Credenciais inválidas" };
-          }
-  
-          // Gera um token JWT usando a variável de ambiente
-          const token = jwt.sign(
-              { userId: usuario.data[0].id },
-              process.env.SECRET_KEY,
-              {
-                  expiresIn: "30d", // Token válido por 30 dias
-              }
-          );
-  
-          // Adiciona o token ao cookie
-          const cookieOptions = {
-              httpOnly: false,
-              expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Cookie válido por 30 dias
-              secure: true, // Apenas enviar cookies através de conexões HTTPS
-              SameSite: "none",
-              path: "/"
-          };
-          const cookieName = "BeholderToken"; // Nome do cookie conforme padrões de nomeação
-  
-          // Adiciona o cookie à resposta
-          res.cookie(cookieName, token, cookieOptions);
-  
-          return { mensagem: "Login bem-sucedido", usuario: usuario.data[0] };
-      } catch (error) {
-          return { error: `Erro ao fazer login: ${error.message}` };
+      if (!usuario.data || usuario.data.length === 0) {
+        return { error: "Credenciais inválidas" };
       }
+  
+      const senhaCorreta = await bcrypt.compare(senha, usuario.data[0].senha);
+  
+      if (!senhaCorreta) {
+        return { error: "Credenciais inválidas" };
+      }
+  
+      // Gera um token JWT usando a variável de ambiente
+      const token = jwt.sign(
+        { userId: usuario.data[0].id },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: "30d", // Token válido por 30 dias
+        }
+      );
+  
+      // Adiciona o token ao cookie
+      const cookieOptions = {
+        httpOnly: false,
+        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Cookie válido por 30 dias
+        secure: true, // Apenas enviar cookies através de conexões HTTPS
+        sameSite: "None", // Ajustado para "None" em vez de "none"
+        path: "/"
+      };
+      const cookieName = "BeholderToken"; // Nome do cookie conforme padrões de nomeação
+  
+      // Adiciona o cookie à resposta
+      res.cookie(cookieName, token, cookieOptions);
+  
+      return { mensagem: "Login bem-sucedido", usuario: usuario.data[0], token }; // Adiciona o token ao retorno
+    } catch (error) {
+      return { error: `Erro ao fazer login: ${error.message}` };
+    }
   }
+  
   
 
 
