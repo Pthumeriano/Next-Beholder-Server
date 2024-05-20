@@ -9,10 +9,14 @@ const autenticarMiddleware = async (req, res, next) => {
     return res.status(401).json({ error: 'Token não fornecido' });
   }
 
+  console.log("Token enviado: ", token)
+
   try {
 
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const usuario = await UsuarioModel.buscarUsuario(decoded.userId);
+
+    console.log("ID encontrado: ", decoded.userId)
 
     if (!usuario.data || usuario.data.length === 0) {
       return res.status(401).json({ error: 'Usuário não autenticado' });
