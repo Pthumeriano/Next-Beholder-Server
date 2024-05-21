@@ -57,6 +57,12 @@ class UsuarioService {
         return { error: "Usuário não encontrado ou senha incorreta" };
       }
 
+      const emailExistente = await UsuarioModel.buscarUsuarioEmail(novoEmail);
+
+      if(emailExistente.data){
+        return {error: "Email já cadastrado"};
+      }
+
       // Atualiza o email
       const result = await UsuarioModel.atualizarEmail(id, novoEmail);
 
