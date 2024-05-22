@@ -75,11 +75,9 @@ const atualizarSenha = async (req, res) => {
 const atualizarUsuario = async (req, res) => {
   try {
     const novosDados = req.body;
+    const userId = req.usuarioAutenticado.userId;
 
-    const result = await UsuarioService.atualizarUsuario(
-      req.usuarioAutenticado.userId,
-      novosDados
-    );
+    const result = await UsuarioService.atualizarUsuario(userId, novosDados);
 
     if (result.error) {
       throw new Error(`Erro ao alterar usuário: ${result.error}`);
@@ -93,6 +91,7 @@ const atualizarUsuario = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 const atualizarEmail = async (req, res) => {
   try {
