@@ -238,10 +238,21 @@ class UsuarioService {
       const usuarioNaMesa = await UsuarioMesaModel.listarMesasDoUsuario(
         usuarioId
       );
-      if (
-        !usuarioNaMesa.data ||
-        !usuarioNaMesa.data.some((m) => m.idmesa === mesaId)
-      ) {
+
+      let taNaMesa = false;
+
+      for(let i=0; i<usuarioNaMesa.data.length; i++){
+        console.log("ID mesa: ", usuarioNaMesa.data[i].mesa.id)
+        if(usuarioNaMesa.data[i].mesa.id == mesaId){
+          console.log("ta na mesa")
+          taNaMesa = true;
+          break;
+        }
+      }
+
+      console.log("passou")
+      
+      if (!taNaMesa){
         return { error: "O usuário não está na mesa" };
       }
 

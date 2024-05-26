@@ -178,6 +178,9 @@ const sairDaMesa = async (req, res) => {
       mesaId
     );
 
+    console.log("mesaID ", mesaId)
+    console.log("user id ", userId)
+
     if (resultadoEntradaMesa.error) {
       throw new Error(`Erro ao sair na mesa: ${resultadoEntradaMesa.error}`);
     }
