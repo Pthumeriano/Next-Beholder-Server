@@ -18,12 +18,13 @@ const validarNovoUsuario = [
     .matches(/[!@#$%^&*]/).withMessage('A senha deve conter pelo menos um caractere especial (!@#$%^&*)'),
     body('datanascimento')
     .optional()
-    .matches(/^\d{2}-\d{2}-\d{4}$/).withMessage('Formato de data inválido (DD-MM-AAAA)')
+    .matches(/^\d{2}\/\d{2}\/\d{4}$/).withMessage('Formato de data inválido. Exemplo: 01/01/1991')
     .custom((value) => {
       const [day, month, year] = value.split('/').map(Number);
       const isValidDate = !isNaN(year) && !isNaN(month) && !isNaN(day);
       return isValidDate;
-    }).withMessage('Data de nascimento inválida'), 
+    }).withMessage('Data de nascimento inválida'),
+
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
