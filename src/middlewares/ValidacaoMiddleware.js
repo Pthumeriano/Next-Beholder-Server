@@ -20,7 +20,7 @@ const validarNovoUsuario = [
     .notEmpty().withMessage('A data de nascimento é obrigatória')
     .matches(/^\d{2}-\d{2}-\d{4}$/).withMessage('Formato de data inválido (DD-MM-AAAA)')
     .custom((value) => {
-      const [day, month, year] = value.split('-').map(Number);
+      const [day, month, year] = value.split('/').map(Number);
       const isValidDate = !isNaN(year) && !isNaN(month) && !isNaN(day);
       return isValidDate;
     }).withMessage('Data de nascimento inválida'), 
