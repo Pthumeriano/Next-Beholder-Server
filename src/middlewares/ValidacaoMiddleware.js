@@ -158,6 +158,66 @@ const validarCriacaoMesa = [
   },
 ];
 
+const validarAlteracaoMesa = [
+  (req, res, next) => {
+    
+    Object.keys(req.body).forEach((key) => req.body[key] === '' && delete req.body[key]);
+    next();
+  },
+  body('titulo')
+    .notEmpty().withMessage('O título é obrigatório')
+    .isLength({ max: 20 }).withMessage('O título não pode ter mais de 30 caracteres'),
+  
+  body('subtitulo')
+    .notEmpty().withMessage('O subtitulo é obrigatório')
+    .isLength({ max: 30 }).withMessage('O subtitulo não pode ter mais de 50 caracteres'),
+  
+  body('sistema')
+    .notEmpty().withMessage('O sistema é obrigatório')
+    .isLength({ max: 30 }).withMessage('O sistema não pode ter mais de 30 caracteres'),
+  
+  body('descricao')
+    .notEmpty().withMessage('A descrição é obrigatória')
+    .isLength({ max: 100 }).withMessage('A descrição não pode ter mais de 100 caracteres'),
+  
+  body('dia')
+    .notEmpty().withMessage('O dia é obrigatório'),
+  
+  body('horario')
+    .notEmpty().withMessage('O horário é obrigatório')
+    .isLength({ max: 10 }).withMessage('O horário não pode ter mais de 10 caracteres'),
+  
+  body('periodo')
+    .notEmpty().withMessage('O período é obrigatório')
+    .isLength({ max: 10 }).withMessage('O período não pode ter mais de 10 caracteres'),
+
+  body('preco')
+    .custom((value, { req }) => {
+      if (req.method === 'PUT' && req.body.preco !== undefined) {
+        return Promise.reject('O preço não pode ser alterado');
+      }
+      return true;
+    }),
+
+  body('vagas')
+    .custom((value, { req }) => {
+      if (req.method === 'PUT' && req.body.vagas !== undefined) {
+        return Promise.reject('O número de vagas não pode ser alterado');
+      }
+      return true;
+    }),
+  
+  (req, res, next) => {
+    const errors = validationResult(req);
+  
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+  
+    next();
+  },
+];
+
 const validarEmail = [
   body('email')
     .notEmpty().withMessage('O e-mail é obrigatório')
@@ -174,4 +234,4 @@ const validarEmail = [
   },
 ];
 
-module.exports = { validarNovoUsuario, validarAtualizacaoSenha, validarAlteracaoUsuario, validarLogin, validarCriacaoMesa, validarEmail };
+module.exports = { validarNovoUsuario, validarAtualizacaoSenha, validarAlteracaoUsuario, validarLogin, validarCriacaoMesa, validarAlteracaoMesa, validarEmail };
