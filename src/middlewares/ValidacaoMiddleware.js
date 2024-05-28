@@ -16,7 +16,7 @@ const validarNovoUsuario = [
     .matches(/[a-z]/).withMessage('A senha deve conter pelo menos uma letra minúscula')
     .matches(/\d/).withMessage('A senha deve conter pelo menos um número')
     .matches(/[!@#$%^&*]/).withMessage('A senha deve conter pelo menos um caractere especial (!@#$%^&*)'),
-
+    body('datanascimento').optional().isISO8601().withMessage('A data de nascimento deve ser uma data válida'), 
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -25,6 +25,7 @@ const validarNovoUsuario = [
     next();
   },
 ];
+
 
 const validarAlteracaoUsuario = [
   body('nome')
