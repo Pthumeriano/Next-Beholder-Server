@@ -1,5 +1,14 @@
 const { body, validationResult } = require('express-validator');
-const { clean } = require('express-json');
+
+function clean(obj) {
+  for (const key in obj) {
+    if (obj[key] === null || obj[key] === "") {
+      delete obj[key];
+    } else if (typeof obj[key] === "object") {
+      clean(obj[key]); // Recursive cleaning for nested objects
+    }
+  }
+}
 
 const validarNovoUsuario = [
   body('nome')
@@ -160,14 +169,14 @@ const validarCriacaoMesa = [
 ];
 
 const validarAlteracaoMesa = [
-  
-  body('titulo').notEmpty().withMessage('O título é obrigatório').isLength({ max: 50 }).withMessage('O título não pode ter mais de 50 caracteres'),
-  body('subtitulo').notEmpty().withMessage('O subtítulo é obrigatório').isLength({ max: 100 }).withMessage('O subtítulo não pode ter mais de 100 caracteres'),
-  body('dia').notEmpty().withMessage('O dia é obrigatório').isLength({ max: 10 }).withMessage('O dia não pode ter mais de 10 caracteres'),
-  body('horario').notEmpty().withMessage('O horário é obrigatório').isLength({ max: 10 }).withMessage('O horário não pode ter mais de 10 caracteres'),
-  body('periodo').notEmpty().withMessage('O período é obrigatório').isLength({ max: 10 }).withMessage('O período não pode ter mais de 10 caracteres'),
-  body('descricao').notEmpty().withMessage('A descrição é obrigatória').isLength({ max: 255 }).withMessage('A descrição não pode ter mais de 255 caracteres'),
-  body('sistema').notEmpty().withMessage('O sistema é obrigatório').isLength({ max: 50 }).withMessage('O sistema não pode ter mais de 50 caracteres'),
+
+  body('titulo').isLength({ max: 50 }).withMessage('O título não pode ter mais de 50 caracteres'),
+  body('subtitulo').isLength({ max: 100 }).withMessage('O subtítulo não pode ter mais de 100 caracteres'),
+  body('dia').isLength({ max: 20 }).withMessage('Como você fez isso?'),
+  body('horario').isLength({ max: 20 }).withMessage('Como você fez isso?'),
+  body('periodo').isLength({ max: 20 }).withMessage('Como você fez isso?'),
+  body('descricao').isLength({ max: 255 }).withMessage('A descrição não pode ter mais de 255 caracteres'),
+  body('sistema').isLength({ max: 20 }).withMessage('O sistema não pode ter mais de 50 caracteres'),
 
  
   body('preco').custom((value, { req }) => {
