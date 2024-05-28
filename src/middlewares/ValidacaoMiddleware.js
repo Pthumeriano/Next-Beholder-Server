@@ -16,7 +16,14 @@ const validarNovoUsuario = [
     .matches(/[a-z]/).withMessage('A senha deve conter pelo menos uma letra minúscula')
     .matches(/\d/).withMessage('A senha deve conter pelo menos um número')
     .matches(/[!@#$%^&*]/).withMessage('A senha deve conter pelo menos um caractere especial (!@#$%^&*)'),
-    body('datanascimento').optional().isISO8601().withMessage('A data de nascimento deve ser uma data válida'), 
+    body('datanascimento')
+    .notEmpty().withMessage('A data de nascimento é obrigatória')
+    .matches(/^\d{2}-\d{2}-\d{4}$/).withMessage('Formato de data inválido (DD-MM-AAAA)')
+    .custom((value) => {
+      const [day, month, year] = value.split('-').map(Number);
+      const isValidDate = !isNaN(year) && !isNaN(month) && !isNaN(day);
+      return isValidDate;
+    }).withMessage('Data de nascimento inválida'), 
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
