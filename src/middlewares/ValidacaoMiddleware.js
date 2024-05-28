@@ -17,7 +17,7 @@ const validarNovoUsuario = [
     .matches(/\d/).withMessage('A senha deve conter pelo menos um número')
     .matches(/[!@#$%^&*]/).withMessage('A senha deve conter pelo menos um caractere especial (!@#$%^&*)'),
     body('datanascimento')
-    .notEmpty().withMessage('A data de nascimento é obrigatória')
+    .optional()
     .matches(/^\d{2}-\d{2}-\d{4}$/).withMessage('Formato de data inválido (DD-MM-AAAA)')
     .custom((value) => {
       const [day, month, year] = value.split('/').map(Number);
